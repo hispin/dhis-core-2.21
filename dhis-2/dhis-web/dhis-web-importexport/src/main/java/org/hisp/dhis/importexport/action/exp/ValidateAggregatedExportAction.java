@@ -1,4 +1,4 @@
-package org.hisp.dhis.gis.action.dataanlysis;
+package org.hisp.dhis.importexport.action.exp;
 
 /*
  * Copyright (c) 2004-2007, University of Oslo
@@ -27,86 +27,66 @@ package org.hisp.dhis.gis.action.dataanlysis;
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
-import org.hisp.dhis.gis.state.SelectionManager;
-import org.hisp.dhis.period.PeriodService;
-import org.hisp.dhis.period.Period;
-import org.hisp.dhis.period.PeriodType;
-import org.hisp.dhis.period.comparator.PeriodComparator;
+import org.hisp.dhis.dataintegrity.DataIntegrityService;
+import org.hisp.dhis.i18n.I18n;
 
 import com.opensymphony.xwork.Action;
 
 /**
- * @author Tran Thanh Tri
- * @version $Id: GetPeriodByPeriodTypeAction.java 25-08-2008 16:06:00 $
+ * @author Lars Helge Overland
+ * @version $Id$
  */
-public class GetPeriodByPeriodTypeAction
+public class ValidateAggregatedExportAction
     implements Action
 {
     // -------------------------------------------------------------------------
     // Dependencies
     // -------------------------------------------------------------------------
 
-    private PeriodService periodService;
+    private DataIntegrityService dataIntegrityService;
 
-    private SelectionManager selectionManager;
-
-    // -------------------------------------------------------------------------
-    // Input & Output
-    // -------------------------------------------------------------------------
-
-    private List<Period> periods;
-
-    private String periodTypeId;
-
-    // -------------------------------------------------------------------------
-    // Getter & Setter
-    // -------------------------------------------------------------------------
-
-    public List<Period> getPeriods()
+    public void setDataIntegrityService( DataIntegrityService dataIntegrityService )
     {
-        return periods;
+        this.dataIntegrityService = dataIntegrityService;
+    }
+    
+    private I18n i18n;
+
+    public void setI18n( I18n i18n )
+    {
+        this.i18n = i18n;
     }
 
-    public void setPeriodService( PeriodService periodService )
+    // -------------------------------------------------------------------------
+    // Output
+    // -------------------------------------------------------------------------
+
+    private String message;
+
+    public String getMessage()
     {
-        this.periodService = periodService;
+        return message;
     }
 
-    public void setSelectionManager( SelectionManager selectionManager )
-    {
-        this.selectionManager = selectionManager;
-    }
-
-    public void setPeriodTypeId( String periodTypeId )
-    {
-        this.periodTypeId = periodTypeId;
-    }
+    // -------------------------------------------------------------------------
+    // Action implementation
+    // -------------------------------------------------------------------------
 
     public String execute()
-        throws Exception
     {
-
-        if ( periodTypeId.equalsIgnoreCase( "ALL" ) )
+        // ---------------------------------------------------------------------
+        // Not allowed to do aggregated export if data elements are associated
+        // with data sets with different period types. This will lead to
+        // duplication of data.
+        // ---------------------------------------------------------------------
+        
+        if ( dataIntegrityService.getDataElementsAssignedToDataSetsWithDifferentPeriodTypes().size() > 1 )
         {
-
-            periods = new ArrayList<Period>( periodService.getAllPeriods() );
-
+            message = i18n.getString( "error_data_elements_with_different_period_types" );
+            
+            return ERROR;
         }
-        else
-        {
-            PeriodType periodType = periodService.getPeriodTypeByName( periodTypeId );
-
-            selectionManager.setPeriodType( periodType );
-
-            periods = new ArrayList<Period>( periodService.getPeriodsByPeriodType( periodType ) );
-        }
-
-        Collections.sort( periods, new PeriodComparator() );
-
+        
         return SUCCESS;
     }
 }
