@@ -204,20 +204,51 @@ function alertField( fieldId, alertMessage )
     return false;
 }
 
+function ajax_login() {
+    $("#login_button").bind("click", function() {
+        var username = prompt("Please enter username");
+        var password = prompt("Please enter password");
+
+        $.post("../dhis-web-commons-security/login.action", {
+            "j_username": username,
+            "j_password": password
+        }).success(function() {
+            alert("login attempt successful, TODO check if login was successful with checkAvailability");
+        })
+    })    
+}
+
 $(document).ready(function() {
+    dhis2.availability.startAvailabilityCheck();
+
     $("#orgUnitTree").one("ouwtLoaded", function() {
         saveDataValuesInLocalStorage();
     });
 
-    dhis2.availability.startAvailabilityCheck();
-
     $(document).bind("dhis2.online", function(event, loggedIn) {
-        console.log("dhis2 is online")
-        console.log("loggedIn: " + loggedIn)
+        if(loggedIn) {
+            if(isHeaderMessageVisible()) {
+                updateHeaderMessage( "Successful connection with server." )
+            } else {
+                setHeaderMessage( "Successful connection with server." )
+            }
+        } else {
+            if(isHeaderMessageVisible()) {
+                updateHeaderMessage( "Successfully connected with server. Please <button id='login_button'>Login</button> " )
+                ajax_login();
+            } else {
+                setHeaderMessage( "Successfully connected with server. Please <button id='login_button'>Login</button> " )
+                ajax_login();
+            }
+        }
     })
 
     $(document).bind("dhis2.offline", function() {
-        console.log("dhis2 is offline")
+        if(isHeaderMessageVisible()) {
+            updateHeaderMessage( "Unable to contact server. Data will be stored locally." )
+        } else {
+            setHeaderMessage( "Unable to contact server. Data will be stored locally." )
+        }
     })
 })
 
