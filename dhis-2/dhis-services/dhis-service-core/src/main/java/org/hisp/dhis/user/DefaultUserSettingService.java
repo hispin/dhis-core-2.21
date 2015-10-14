@@ -30,15 +30,12 @@ package org.hisp.dhis.user;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.transaction.annotation.Transactional;
 
 /**
  * @author Torgeir Lorange Ostby
- * @version $Id: DefaultUserSettingService.java 5724 2008-09-18 14:37:01Z larshelg $
  */
 @Transactional
 public class DefaultUserSettingService
@@ -80,29 +77,13 @@ public class DefaultUserSettingService
     }
 
     @Override
-    public void addOrUpdateUserSetting( UserSetting userSetting )
-    {
-        UserSetting setting = getUserSetting( userSetting.getUser(), userSetting.getName() );
-
-        if ( setting != null )
-        {
-            setting.mergeWith( userSetting );
-            updateUserSetting( setting );
-        }
-        else
-        {
-            addUserSetting( userSetting );
-        }
-    }
-
-    @Override
     public void saveUserSetting( String name, Serializable value, String username )
     {
         UserCredentials credentials = userService.getUserCredentialsByUsername( username );
         
         if ( credentials != null )
         {        
-            save( name, value, credentials.getUserInfo() );
+            saveUserSetting( name, value, credentials.getUserInfo() );
         }
     }
 
@@ -111,10 +92,11 @@ public class DefaultUserSettingService
     {
         User currentUser = currentUserService.getCurrentUser();
         
-        save( name, value, currentUser );
+        saveUserSetting( name, value, currentUser );
     }
 
-    private void save( String name, Serializable value, User user )
+    @Override
+    public void saveUserSetting( String name, Serializable value, User user )
     {
         if ( user == null )
         {
@@ -153,13 +135,6 @@ public class DefaultUserSettingService
     }
 
     @Override
-    public void removeUserSettings( User user )
-    {
-        userSettingStore.removeUserSettings( user );
-    }
-
-
-    @Override
     public void deleteUserSetting( String name )
     {
         User currentUser = currentUserService.getCurrentUser();
@@ -170,12 +145,6 @@ public class DefaultUserSettingService
         }
     }
     
-    @Override
-    public List<UserSetting> getUserSettings( String name )
-    {
-        return userSettingStore.getUserSettings( name );
-    }
-
     @Override
     public UserSetting getUserSetting( User user, String name )
     {
@@ -210,14 +179,6 @@ public class DefaultUserSettingService
         return getUserSetting( name, currentUser );
     }
 
-    @Override
-    public Serializable getUserSetting( String name, String username )
-    {
-        UserCredentials credentials = userService.getUserCredentialsByUsername( username );
-        
-        return getUserSetting( name, credentials == null ? null : credentials.getUserInfo() );
-    }
-
     private Serializable getUserSetting( String name, User currentUser ) 
     {
         if ( currentUser == null )
@@ -241,19 +202,6 @@ public class DefaultUserSettingService
         UserSetting setting = getUserSetting( user, name );
 
         return setting != null && setting.getValue() != null ? setting.getValue() : defaultValue;
-    }
-
-    @Override
-    public Map<User, Serializable> getUserSettings( String name, Serializable defaultValue )
-    {
-        Map<User, Serializable> map = new HashMap<>();
-
-        for ( UserSetting setting : userSettingStore.getUserSettings( name ) )
-        {
-            map.put( setting.getUser(), setting.getValue() != null ? setting.getValue() : defaultValue );
-        }
-
-        return map;
     }
 
     @Override
