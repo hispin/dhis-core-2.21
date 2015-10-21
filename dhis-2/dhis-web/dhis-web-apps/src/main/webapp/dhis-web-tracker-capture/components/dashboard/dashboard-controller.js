@@ -360,8 +360,9 @@ trackerCapture.controller('DashboardController',
         }, function(){            
         });
     };
+    
     $scope.back = function(){
-        $location.path('/').search({program: $scope.selectedProgramId});                   
+        $location.path('/').search({program: $scope.selectedProgramId});
     };
     
     $scope.displayEnrollment = false;
