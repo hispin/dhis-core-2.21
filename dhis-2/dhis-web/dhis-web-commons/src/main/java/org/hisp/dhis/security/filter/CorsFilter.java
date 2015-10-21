@@ -143,8 +143,8 @@ public class CorsFilter
 
         String localUrl = uriBuilder.build().toString();
 
-        return !StringUtils.isEmpty( origin ) && ( localUrl.equals( origin ) || 
-            configurationService.getCorsWhitelist().contains( origin ) );
+        return !StringUtils.isEmpty( origin ) && ( localUrl.equals( origin ) ||
+            configurationService.isCorsWhitelisted( origin ) );
     }
 
     @Override
