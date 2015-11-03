@@ -56,6 +56,8 @@ import org.hisp.dhis.common.QueryItem;
 import org.hisp.dhis.common.QueryOperator;
 import org.hisp.dhis.common.ValueType;
 import org.hisp.dhis.dataelement.DataElement;
+import org.hisp.dhis.dataelement.DataElementCategoryOptionCombo;
+import org.hisp.dhis.dataelement.DataElementCategoryService;
 import org.hisp.dhis.dataelement.DataElementService;
 import org.hisp.dhis.event.EventStatus;
 import org.hisp.dhis.i18n.I18nFormat;
@@ -190,6 +192,8 @@ public class ActivityReportingServiceImpl
     private InterpretationService interpretationService;
 
     private ChartService chartService;
+    
+    private DataElementCategoryService dataElementCategoryService;
 
     private Integer patientId;
 
@@ -284,6 +288,12 @@ public class ActivityReportingServiceImpl
     public void setUserService( UserService userService )
     {
         this.userService = userService;
+    }
+    
+    @Required
+    public void setDataElementCategoryService( DataElementCategoryService dataElementCategoryService )
+    {
+        this.dataElementCategoryService = dataElementCategoryService;
     }
 
     // -------------------------------------------------------------------------
@@ -662,6 +672,7 @@ public class ActivityReportingServiceImpl
         programInstance.setProgram( program );
         programInstance.setEntityInstance( patient );
         programInstance.setStatus( ProgramStatus.ACTIVE );
+        programInstance.setOrganisationUnit( patient.getOrganisationUnit() );
         programInstanceService.addProgramInstance( programInstance );
 
         Iterator<ProgramStage> programStagesIterator = program.getProgramStages().iterator();
@@ -675,6 +686,8 @@ public class ActivityReportingServiceImpl
                 ProgramStageInstance programStageInstance = new ProgramStageInstance();
                 programStageInstance.setProgramInstance( programInstance );
                 programStageInstance.setProgramStage( programStage );
+                programStageInstance.setOrganisationUnit( patient.getOrganisationUnit() );
+                programStageInstance.setAttributeOptionCombo( dataElementCategoryService.getDefaultDataElementCategoryOptionCombo() );
                 Date dateCreatedEvent = new Date();
                 if ( programStage.getGeneratedByEnrollmentDate() )
                 {
@@ -2592,4 +2605,6 @@ public class ActivityReportingServiceImpl
 
         return getPatientModel( newTrackedEntityInstance );
     }
+    
+    
 }
