@@ -48,7 +48,7 @@ public class ProgramStage
 
     private String dueDate;
 
-    private String reportDateDescription;
+    private String reportDateDescription = "Report Date";
 
     private boolean isRepeatable;
 
@@ -141,7 +141,10 @@ public class ProgramStage
 
     public void setReportDateDescription( String reportDateDescription )
     {
-        this.reportDateDescription = reportDateDescription;
+		if ( reportDateDescription != null )
+		{
+			this.reportDateDescription = reportDateDescription;
+		}
     }
 
     public Integer getStandardInterval()
