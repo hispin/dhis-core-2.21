@@ -116,7 +116,7 @@ var eventCaptureServices = angular.module('eventCaptureServices', ['ngResource']
         var hasRole = false;
 
         if($.isEmptyObject(program.userRoles)){
-            return !hasRole;
+            return hasRole;
         }
 
         for(var i=0; i < userRoles.length && !hasRole; i++){
