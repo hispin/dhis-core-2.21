@@ -128,6 +128,7 @@ import org.hisp.dhis.dataelement.DataElementOperand;
 import org.hisp.dhis.dataelement.DataElementOperandService;
 import org.hisp.dhis.expression.ExpressionService;
 import org.hisp.dhis.i18n.I18nFormat;
+import org.hisp.dhis.i18n.I18nService;
 import org.hisp.dhis.indicator.Indicator;
 import org.hisp.dhis.organisationunit.OrganisationUnit;
 import org.hisp.dhis.organisationunit.OrganisationUnitGroup;
@@ -205,6 +206,9 @@ public class DefaultAnalyticsService
     
     @Autowired
     private CurrentUserService currentUserService;
+    
+    @Autowired
+    private I18nService i18nService;
 
     public void setCurrentUserService( CurrentUserService currentUserService )
     {
@@ -1405,6 +1409,8 @@ public class DefaultAnalyticsService
         {
             List<NameableObject> items = new ArrayList<>( dimension.getItems() );
 
+            i18nService.internationalise( items );
+            
             for ( NameableObject object : items )
             {
                 if ( DimensionType.PERIOD.equals( dimension.getDimensionType() ) && !calendar.isIso8601() )
