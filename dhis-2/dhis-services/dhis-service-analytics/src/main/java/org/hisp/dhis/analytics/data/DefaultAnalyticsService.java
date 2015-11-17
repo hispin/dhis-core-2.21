@@ -1415,7 +1415,7 @@ public class DefaultAnalyticsService
                 }
                 else
                 {
-                    map.put( object.getUid(), NameableObjectUtils.getDisplayProperty( object, params.getDisplayProperty() ) );
+                    map.put( object.getUid(), object.getDisplayProperty( params.getDisplayProperty() ) );
                 }
 
                 if ( DimensionType.ORGANISATIONUNIT.equals( dimension.getDimensionType() ) && params.isHierarchyMeta() )
@@ -1426,7 +1426,7 @@ public class DefaultAnalyticsService
                 }
             }
 
-            map.put( dimension.getDimension(), NameableObjectUtils.getDisplayProperty( dimension, params.getDisplayProperty() ) );
+            map.put( dimension.getDimension(), dimension.getDisplayProperty( params.getDisplayProperty() ) );
         }
 
         return map;
