@@ -45,7 +45,6 @@ import org.hisp.dhis.legend.LegendSet;
 import org.hisp.dhis.period.PeriodType;
 import org.hisp.dhis.system.util.AttributeUtils;
 import org.hisp.dhis.user.UserGroupService;
-import org.hisp.dhis.user.UserService;
 
 import com.google.common.collect.Lists;
 import com.opensymphony.xwork2.Action;
@@ -86,13 +85,6 @@ public class AddDataSetAction
     public void setCategoryService( DataElementCategoryService categoryService )
     {
         this.categoryService = categoryService;
-    }
-
-    private UserService userService;
-
-    public void setUserService( UserService userService )
-    {
-        this.userService = userService;
     }
 
     private UserGroupService userGroupService;
@@ -352,8 +344,6 @@ public class AddDataSetAction
         }
 
         dataSetService.addDataSet( dataSet );
-
-        userService.assignDataSetToUserRole( dataSet );
 
         return SUCCESS;
     }

@@ -356,8 +356,6 @@ public interface UserService
      */
     int countDataSetUserAuthorityGroups( DataSet dataSet );
 
-    void assignDataSetToUserRole( DataSet dataSet );
-
     /**
      * Returns the number of UserAuthorityGroups.
      * 
