@@ -1559,7 +1559,7 @@ var trackerCaptureServices = angular.module('trackerCaptureServices', ['ngResour
             var header = []; 
             angular.forEach(columns, function(col){
                 if(col.show){
-                    header.push($translate(col.name));
+                    header.push($translate.instant(col.name));
                 }
             });        
             return header;
