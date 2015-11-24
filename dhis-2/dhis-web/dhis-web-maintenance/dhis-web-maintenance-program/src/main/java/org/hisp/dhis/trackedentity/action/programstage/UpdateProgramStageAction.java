@@ -432,11 +432,11 @@ public class UpdateProgramStageAction
                 attributeService );
         }
 
-        programStageService.updateProgramStage( programStage );
-
         Set<ProgramStageDataElement> programStageDataElements = new HashSet<>(
             programStage.getProgramStageDataElements() );
-
+        
+        programStage.getProgramStageDataElements().clear();
+        
         for ( int i = 0; i < this.selectedDataElementsValidator.size(); i++ )
         {
             DataElement dataElement = dataElementService.getDataElement( selectedDataElementsValidator.get( i ) );
@@ -467,13 +467,17 @@ public class UpdateProgramStageAction
 
                 programStageDataElements.remove( programStageDataElement );
             }
-        }
-
+            
+            programStage.getProgramStageDataElements().add( programStageDataElement );
+        }        
+        
+        programStageService.updateProgramStage( programStage );
+        
         for ( ProgramStageDataElement psdeDelete : programStageDataElements )
-        {
+        {            
             programStageDataElementService.deleteProgramStageDataElement( psdeDelete );
         }
-
+        
         programId = programStage.getProgram().getId();
 
         return SUCCESS;
