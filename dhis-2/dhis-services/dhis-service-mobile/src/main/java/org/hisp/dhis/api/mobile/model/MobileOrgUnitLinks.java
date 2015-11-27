@@ -608,22 +608,11 @@ public class MobileOrgUnitLinks
         dataOutputStream.writeUTF( this.downloadAllUrl );
         dataOutputStream.writeUTF( this.updateActivityPlanUrl );
         dataOutputStream.writeUTF( this.uploadFacilityReportUrl );
-        dataOutputStream.writeUTF( this.downloadFacilityReportUrl );
         dataOutputStream.writeUTF( this.uploadActivityReportUrl );
         dataOutputStream.writeUTF( this.updateDataSetUrl );
         dataOutputStream.writeUTF( this.changeUpdateDataSetLangUrl );
         dataOutputStream.writeUTF( this.searchUrl );
         dataOutputStream.writeUTF( this.updateNewVersionUrl );
-        dataOutputStream.writeUTF( this.sendFeedbackUrl );
-        dataOutputStream.writeUTF( this.findUserUrl );
-        dataOutputStream.writeUTF( this.sendMessageUrl );
-        dataOutputStream.writeUTF( this.downloadMessageConversationUrl );
-        dataOutputStream.writeUTF( this.getMessageUrl );
-        dataOutputStream.writeUTF( this.replyMessageUrl );
-        dataOutputStream.writeUTF( this.downloadInterpretationUrl );
-        dataOutputStream.writeUTF( this.postInterpretationUrl );
-        dataOutputStream.writeUTF( this.postCommentUrl );
-        // dataOutputStream.writeUTF( this.updateContactUrl );
     }
 
     @Override
