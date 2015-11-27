@@ -58,7 +58,7 @@ trackerCapture.controller('DataEntryController',
     $scope.invalidDate = false;
 
     //note
-    $scope.note = '';
+    $scope.note = {};
 
     //event color legend
     $scope.eventColors = [
@@ -720,14 +720,14 @@ trackerCapture.controller('DataEntryController',
     };
 
     $scope.addNote = function () {
-        if (!angular.isUndefined($scope.note) && $scope.note !== "") {
-            var newNote = {value: $scope.note};
+        if ($scope.note.value !== "" || !angular.isUndefined($scope.note.value)) {
+            var newNote = {value: $scope.note.value};
 
             if (angular.isUndefined($scope.currentEvent.notes)) {
-                $scope.currentEvent.notes = [{value: $scope.note, storedDate: today, storedBy: storedBy}];
+                $scope.currentEvent.notes = [{value: newNote.value, storedDate: today, storedBy: storedBy}];
             }
             else {
-                $scope.currentEvent.notes.splice(0, 0, {value: $scope.note, storedDate: today, storedBy: storedBy});
+                $scope.currentEvent.notes.splice(0, 0, {value: newNote.value, storedDate: today, storedBy: storedBy});
             }
 
             var e = {event: $scope.currentEvent.event,
@@ -739,13 +739,13 @@ trackerCapture.controller('DataEntryController',
             };
 
             DHIS2EventFactory.updateForNote(e).then(function (data) {
-                $scope.note = '';
+                $scope.note = {};
             });
         }
     };
 
     $scope.clearNote = function () {
-        $scope.note = '';
+        $scope.note = {};
     };
 
     $scope.getInputDueDateClass = function (event) {

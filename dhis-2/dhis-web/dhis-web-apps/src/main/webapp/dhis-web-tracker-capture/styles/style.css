@@ -1179,4 +1179,8 @@ input, button, select, textarea {
     font-weight: bold;
     cursor: default;
     width: 100%;
+}   
+
+.wrap-text {
+    word-wrap: break-word;
 }

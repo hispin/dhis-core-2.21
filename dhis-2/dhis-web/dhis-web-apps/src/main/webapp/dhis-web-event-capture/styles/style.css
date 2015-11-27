@@ -377,3 +377,6 @@ div#orgUnitTree {
     //height: 1.5em; 
     height: inherit;  //this is to make it play nice with bootstrap
 }
+.wrap-text {
+    word-wrap: break-word;
+}
