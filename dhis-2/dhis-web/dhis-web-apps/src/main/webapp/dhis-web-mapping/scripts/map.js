@@ -2973,6 +2973,14 @@ Ext.onReady(function() {
 		loadOrganisationUnits = function(view) {
             var items = view.rows[0].items,
                 isPlugin = GIS.plugin && !GIS.app,
+                propertyMap = {
+                    'name': 'name',
+                    'displayName': 'name',
+                    'shortName': 'shortName',
+                    'displayShortName': 'shortName'
+                },
+                keyAnalysisDisplayProperty = gis.init.userAccount.settings.keyAnalysisDisplayProperty,
+                displayProperty = propertyMap[keyAnalysisDisplayProperty] || propertyMap[xLayout.displayProperty] || 'name',
                 url = function() {
                     var params = '?ou=ou:';
 
@@ -2981,7 +2989,7 @@ Ext.onReady(function() {
                         params += i !== items.length - 1 ? ';' : '';
                     }
 
-                    params += '&displayProperty=' + gis.init.userAccount.settings.keyAnalysisDisplayProperty.toUpperCase();
+                    params += '&displayProperty=' + displayProperty.toUpperCase();
 
                     if (Ext.isArray(view.userOrgUnit) && view.userOrgUnit.length) {
                         params += '&userOrgUnit=';
@@ -3258,6 +3266,14 @@ Ext.onReady(function() {
 		loadOrganisationUnits = function(view) {
 			var items = view.rows[0].items,
                 isPlugin = GIS.plugin && !GIS.app,
+                propertyMap = {
+                    'name': 'name',
+                    'displayName': 'name',
+                    'shortName': 'shortName',
+                    'displayShortName': 'shortName'
+                },
+                keyAnalysisDisplayProperty = gis.init.userAccount.settings.keyAnalysisDisplayProperty,
+                displayProperty = propertyMap[keyAnalysisDisplayProperty] || propertyMap[xLayout.displayProperty] || 'name',
                 url = function() {
                     var params = '?ou=ou:';
 
@@ -3266,7 +3282,7 @@ Ext.onReady(function() {
                         params += i !== items.length - 1 ? ';' : '';
                     }
 
-                    params += '&displayProperty=' + gis.init.userAccount.settings.keyAnalysisDisplayProperty.toUpperCase();
+                    params += '&displayProperty=' + displayProperty.toUpperCase();
 
                     if (Ext.isArray(view.userOrgUnit) && view.userOrgUnit.length) {
                         params += '&userOrgUnit=';
@@ -3621,6 +3637,14 @@ Ext.onReady(function() {
 		loadOrganisationUnits = function(view) {
 			var items = view.rows[0].items,
                 isPlugin = GIS.plugin && !GIS.app,
+                propertyMap = {
+                    'name': 'name',
+                    'displayName': 'name',
+                    'shortName': 'shortName',
+                    'displayShortName': 'shortName'
+                },
+                keyAnalysisDisplayProperty = gis.init.userAccount.settings.keyAnalysisDisplayProperty,
+                displayProperty = propertyMap[keyAnalysisDisplayProperty] || propertyMap[xLayout.displayProperty] || 'name',
                 url = function() {
                     var params = '?ou=ou:';
 
@@ -3629,7 +3653,7 @@ Ext.onReady(function() {
                         params += i !== items.length - 1 ? ';' : '';
                     }
 
-                    params += '&displayProperty=' + gis.init.userAccount.settings.keyAnalysisDisplayProperty.toUpperCase();
+                    params += '&displayProperty=' + displayProperty.toUpperCase();
 
                     if (Ext.isArray(view.userOrgUnit) && view.userOrgUnit.length) {
                         params += '&userOrgUnit=';
@@ -3705,7 +3729,15 @@ Ext.onReady(function() {
 				dxItems = view.columns[0].items,
 				isOperand = view.columns[0].dimension === dimConf.operand.objectName,
 				peItems = view.filters[0].items,
-				ouItems = view.rows[0].items;
+				ouItems = view.rows[0].items,
+                propertyMap = {
+                    'name': 'name',
+                    'displayName': 'name',
+                    'shortName': 'shortName',
+                    'displayShortName': 'shortName'
+                },
+                keyAnalysisDisplayProperty = gis.init.userAccount.settings.keyAnalysisDisplayProperty,
+                displayProperty = propertyMap[keyAnalysisDisplayProperty] || propertyMap[view.displayProperty] || 'name';
 
 			// ou
 			paramString += 'dimension=ou:';
@@ -3739,7 +3771,7 @@ Ext.onReady(function() {
 			}
 
             // display property
-            paramString += '&displayProperty=' + gis.init.userAccount.settings.keyAnalysisDisplayProperty.toUpperCase();            
+            paramString += '&displayProperty=' + displayProperty.toUpperCase();            
 
             if (Ext.isArray(view.userOrgUnit) && view.userOrgUnit.length) {
                 paramString += '&userOrgUnit=';
@@ -6756,7 +6788,6 @@ Ext.onReady(function() {
         var isInit = false,
             requests = [],
             callbacks = 0,
-            type = 'json',
             ajax,
             fn;
 
@@ -6787,7 +6818,7 @@ Ext.onReady(function() {
         
         // dhis2
         requests.push({
-            url: init.contextPath + '/api/systemSettings.' + type + '?key=keyCalendar&key=keyDateFormat',
+            url: init.contextPath + '/api/systemSettings.json?key=keyCalendar&key=keyDateFormat',
             disableCaching: false,
             success: function(r) {
                 var systemSettings = r.responseText ? Ext.decode(r.responseText) : r,
@@ -6798,14 +6829,20 @@ Ext.onReady(function() {
 
                 // user-account
                 userAccountConfig = {
-                    url: init.contextPath + '/api/me/user-account.' + type,
+                    url: init.contextPath + '/api/me/user-account.json',
                     disableCaching: false,
                     success: function(r) {
                         init.userAccount = r.responseText ? Ext.decode(r.responseText) : r;
 
                         var onScriptReady = function() {
                             var defaultKeyUiLocale = 'en',
-                                defaultKeyAnalysisDisplayProperty = 'name',
+                                defaultKeyAnalysisDisplayProperty = 'displayName',
+                                displayPropertyMap = {
+                                    'name': 'displayName',
+                                    'displayName': 'displayName',
+                                    'shortName': 'displayShortName',
+                                    'displayShortName': 'displayShortName'
+                                },
                                 namePropertyUrl,
                                 contextPath,
                                 keyUiLocale,
@@ -6813,13 +6850,13 @@ Ext.onReady(function() {
                                 optionSetVersionConfig;
 
                             init.userAccount.settings.keyUiLocale = init.userAccount.settings.keyUiLocale || defaultKeyUiLocale;
-                            init.userAccount.settings.keyAnalysisDisplayProperty = init.userAccount.settings.keyAnalysisDisplayProperty || defaultKeyAnalysisDisplayProperty;
+                            init.userAccount.settings.keyAnalysisDisplayProperty = displayPropertyMap[init.userAccount.settings.keyAnalysisDisplayProperty] || defaultKeyAnalysisDisplayProperty;
 
                             // local vars
                             contextPath = init.contextPath;
                             keyUiLocale = init.userAccount.settings.keyUiLocale;
                             keyAnalysisDisplayProperty = init.userAccount.settings.keyAnalysisDisplayProperty;
-                            namePropertyUrl = keyAnalysisDisplayProperty === defaultKeyAnalysisDisplayProperty ? keyAnalysisDisplayProperty : keyAnalysisDisplayProperty + '|rename(' + defaultKeyAnalysisDisplayProperty + ')';
+                            namePropertyUrl = keyAnalysisDisplayProperty + '|rename(name)';
                             dateFormat = init.systemInfo.dateFormat;
 
                             init.namePropertyUrl = namePropertyUrl;
@@ -6834,7 +6871,7 @@ Ext.onReady(function() {
                             });
 
                             optionSetVersionConfig = {
-                                url: contextPath + '/api/optionSets.' + type + '?fields=id,version&paging=false',
+                                url: contextPath + '/api/optionSets.json?fields=id,version&paging=false',
                                 disableCaching: false,
                                 success: function(r) {
                                     var optionSets = (r.responseText ? Ext.decode(r.responseText).optionSets : r.optionSets) || [],
@@ -6852,7 +6889,7 @@ Ext.onReady(function() {
                                     }
 
                                     optionSetConfig = {
-                                        url: contextPath + '/api/optionSets.' + type + '?fields=id,name,version,options[code,name]&paging=false' + url,
+                                        url: contextPath + '/api/optionSets.json?fields=id,name,version,options[code,name]&paging=false' + url,
                                         disableCaching: false,
                                         success: function(r) {
                                             var sets = r.responseText ? Ext.decode(r.responseText).optionSets : r.optionSets;
@@ -6926,7 +6963,7 @@ Ext.onReady(function() {
 
         // user orgunit
         requests.push({
-            url: init.contextPath + '/api/organisationUnits.' + type + '?userOnly=true&fields=id,name,children[id,name]&paging=false',
+            url: init.contextPath + '/api/organisationUnits.json?userOnly=true&fields=id,' + init.namePropertyUrl + ',children[id,' + init.namePropertyUrl + ']&paging=false',
             disableCaching: false,
             success: function(r) {
                 var organisationUnits = (r.responseText ? Ext.decode(r.responseText).organisationUnits : r) || [],
@@ -6957,7 +6994,7 @@ Ext.onReady(function() {
 
         // dimensions
         requests.push({
-            url: init.contextPath + '/api/dimensions.' + type + '?fields=id,name&paging=false',
+            url: init.contextPath + '/api/dimensions.json?fields=id,displayName|rename(name)&paging=false',
             disableCaching: false,
             success: function(r) {
                 init.dimensions = r.responseText ? Ext.decode(r.responseText).dimensions : r.dimensions;
