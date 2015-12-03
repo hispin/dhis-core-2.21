@@ -285,9 +285,9 @@ Ext.onReady( function() {
                     '*',
                     'program[id,displayName|rename(name)]',
                     'programStage[id,displayName|rename(name)]',
-                    'columns[dimension,filter,items[dimensionItem|rename(id),' + init.namePropertyUrl + ']]',
-                    'rows[dimension,filter,items[dimensionItem|rename(id),' + init.namePropertyUrl + ']]',
-                    'filters[dimension,filter,items[dimensionItem|rename(id),' + init.namePropertyUrl + ']]',
+                    'columns[dimension,filter,items[id,' + init.namePropertyUrl + ']]',
+                    'rows[dimension,filter,items[id,' + init.namePropertyUrl + ']]',
+                    'filters[dimension,filter,items[id,' + init.namePropertyUrl + ']]',
                     '!lastUpdated',
                     '!href',
                     '!created',
@@ -3210,36 +3210,36 @@ Ext.onReady( function() {
         });
 
         // user orgunit
-		//requests.push({
-			//url: init.contextPath + '/api/organisationUnits.' + type + '?userOnly=true&fields=id,name,children[id,name]&paging=false',
-            //disableCaching: false,
-			//success: function(r) {
-				//var organisationUnits = (r.responseText ? Ext.decode(r.responseText).organisationUnits : r) || [],
-                    //ou = [],
-                    //ouc = [];
+		requests.push({
+			url: init.contextPath + '/api/organisationUnits.' + type + '?userOnly=true&fields=id,name,children[id,name]&paging=false',
+            disableCaching: false,
+			success: function(r) {
+				var organisationUnits = (r.responseText ? Ext.decode(r.responseText).organisationUnits : r) || [],
+                    ou = [],
+                    ouc = [];
 
-                //if (organisationUnits.length) {
-                    //for (var i = 0, org; i < organisationUnits.length; i++) {
-                        //org = organisationUnits[i];
+                if (organisationUnits.length) {
+                    for (var i = 0, org; i < organisationUnits.length; i++) {
+                        org = organisationUnits[i];
 
-                        //ou.push(org.id);
+                        ou.push(org.id);
 
-                        //if (org.children) {
-                            //ouc = Ext.Array.clean(ouc.concat(Ext.Array.pluck(org.children, 'id') || []));
-                        //}
-                    //}
+                        if (org.children) {
+                            ouc = Ext.Array.clean(ouc.concat(Ext.Array.pluck(org.children, 'id') || []));
+                        }
+                    }
 
-                    //init.user = init.user || {};
-                    //init.user.ou = ou;
-                    //init.user.ouc = ouc;
-                //}
-                //else {
-                    //alert('User is not assigned to any organisation units');
-                //}
+                    init.user = init.user || {};
+                    init.user.ou = ou;
+                    init.user.ouc = ouc;
+                }
+                else {
+                    alert('User is not assigned to any organisation units');
+                }
 
-                //fn();
-			//}
-		//});
+                fn();
+			}
+		});
 
         // dimensions
 		requests.push({
