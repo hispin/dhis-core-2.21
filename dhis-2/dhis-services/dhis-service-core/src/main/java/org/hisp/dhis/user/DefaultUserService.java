@@ -614,4 +614,16 @@ public class DefaultUserService
 
         return months < credentialsExpires;
     }
+	
+	@Override
+    public Collection<User> getUsersByEmail( String email ) 
+    {
+        return userStore.getUsersByEmail( email );                 
+    }
+
+    @Override
+    public Collection<User> getUserByNameAndGroup( String name, String type , int first, int max)
+    {        
+        return userStore.getUserByNameAndGroup( name, type ,first, max);
+    }
 }

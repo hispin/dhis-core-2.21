@@ -218,7 +218,8 @@ public class ContextUtils
 
         builder.append( request.getContextPath() );
 
-        return builder.toString();
+        //return builder.toString();
+		return "https://extranet.who.int/immunization_repository";
     }
 
     public static String getRootPath( HttpServletRequest request )

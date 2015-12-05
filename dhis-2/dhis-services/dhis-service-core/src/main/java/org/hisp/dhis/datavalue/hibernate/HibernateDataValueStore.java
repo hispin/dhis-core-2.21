@@ -566,4 +566,42 @@ public class HibernateDataValueStore
         
         return ids;
     }
+	
+	public DataValue getLatestDataValue( DataElement dataElement, DataElementCategoryOptionCombo categoryOptionCombo, OrganisationUnit organisationUnit )
+    {
+        final String hsql = "SELECT v FROM DataValue v, Period p WHERE  v.dataElement =:dataElement "
+            + " AND v.period=p AND v.categoryOptionCombo=:categoryOptionCombo AND v.source=:source ORDER BY p.endDate DESC";
+
+        Session session = sessionFactory.getCurrentSession();
+
+        Query query = session.createQuery( hsql );
+
+        query.setParameter( "dataElement", dataElement );
+        query.setParameter( "categoryOptionCombo", categoryOptionCombo );
+        query.setParameter( "source", organisationUnit );
+        
+        query.setFirstResult( 0 );
+        query.setMaxResults( 1 );
+        
+        return (DataValue) query.uniqueResult();
+    }	
+
+    public DataValue getLatestDataValue( Integer dataElementId, Integer categoryOptionComboId, Integer ouId )
+    {
+        final String hsql = "SELECT v FROM DataValue v, Period p WHERE  v.dataElement.id =:dataElementId "
+            + " AND v.period=p AND v.categoryOptionCombo.id=:categoryOptionComboId AND v.source.id=:ouId ORDER BY p.endDate DESC";
+
+        Session session = sessionFactory.getCurrentSession();
+
+        Query query = session.createQuery( hsql );
+
+        query.setParameter( "dataElementId", dataElementId );
+        query.setParameter( "categoryOptionComboId", categoryOptionComboId );
+        query.setParameter( "ouId", ouId );
+        
+        query.setFirstResult( 0 );
+        query.setMaxResults( 1 );
+
+        return (DataValue) query.uniqueResult();
+    } 
 }

@@ -154,6 +154,18 @@ public class DataElement
      * The option set for comments linked to this data element.
      */
     private OptionSet commentOptionSet;
+    
+    private Set<OrganisationUnit> orgUnits = new HashSet<OrganisationUnit>();
+    
+    public Set<OrganisationUnit> getOrgUnits()
+    {
+    	return orgUnits;
+    }
+    
+    public void setOrgUnits( Set<OrganisationUnit> orgUnits )
+    {
+    	this.orgUnits = orgUnits;
+    }
 
     // -------------------------------------------------------------------------
     // Constructors

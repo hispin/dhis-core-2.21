@@ -7,21 +7,20 @@
 
 html,body
 {
-  background-color: #1d5288;  
-  color: white;
+  background-color: #ffffff;  
+  color: black;
   font-size: 15px;
 }
 
 a
 {
-  color: #e6eaf1;
+  color: blue;
   text-decoration: none;
 }
 
 a:hover
 {
-  color: #fff;
-  text-decoration: underline;
+  color: blue;
 }
 
 #flagArea

@@ -31,9 +31,17 @@ package org.hisp.dhis.dataset;
 import static org.hisp.dhis.i18n.I18nUtils.i18n;
 
 import java.util.List;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.hisp.dhis.i18n.I18nService;
 import org.springframework.transaction.annotation.Transactional;
+import org.hisp.dhis.organisationunit.OrganisationUnit;
+import org.hisp.dhis.organisationunit.OrganisationUnitService;
+import org.hisp.dhis.user.CurrentUserService;
+import org.springframework.beans.factory.annotation.Autowired;
+
 
 /**
  * @author Tri
@@ -68,6 +76,12 @@ public class DefaultSectionService
         this.dataSetService = dataSetService;
     }
 
+	@Autowired
+    private OrganisationUnitService organisationUnitService;
+    
+    @Autowired
+    private CurrentUserService currentUserService;
+	
     // -------------------------------------------------------------------------
     // SectionService implementation
     // -------------------------------------------------------------------------
@@ -115,4 +129,24 @@ public class DefaultSectionService
     {
         sectionStore.update( section );
     }
+	
+    @Override
+    public void mergeWithCurrentUserOrganisationUnits(Section section, Collection<OrganisationUnit> mergeOrganisationUnits) 
+    {
+    	Set<OrganisationUnit> organisationUnits = new HashSet<OrganisationUnit>( section.getSources() );
+    
+    	Set<OrganisationUnit> userOrganisationUnits = new HashSet<OrganisationUnit>();
+    
+    	for ( OrganisationUnit organisationUnit : currentUserService.getCurrentUser().getOrganisationUnits() )
+    	{
+    		//userOrganisationUnits.addAll( organisationUnitService.getOrganisationUnitsWithChildren( organisationUnit.getUid() ) );
+    	}
+     
+    	organisationUnits.removeAll( userOrganisationUnits );
+    	organisationUnits.addAll( mergeOrganisationUnits );
+     
+    	section.setSources( organisationUnits );
+     
+    	updateSection(section);
+    }	
 }

@@ -291,4 +291,9 @@ public interface DataValueStore
      * @param sourceIds the Collection of Source identifiers.
      */
     Collection<DeflatedDataValue> getDeflatedDataValues( int dataElementId, int periodId, Collection<Integer> sourceIds );
+
+	DataValue getLatestDataValue( DataElement dataElement, DataElementCategoryOptionCombo optionCombo, OrganisationUnit organisationUnit );
+    
+    DataValue getLatestDataValue( Integer dataElementId, Integer categoryOptionComboId, Integer ouId );
+	
 }
