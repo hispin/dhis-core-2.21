@@ -35,6 +35,7 @@ import java.io.InputStream;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hisp.dhis.common.IdentifiableProperty;
+import org.hibernate.SessionFactory;
 import org.hisp.dhis.commons.util.StreamUtils;
 import org.hisp.dhis.dxf2.common.ImportOptions;
 import org.hisp.dhis.dxf2.datavalueset.DataValueSetService;
@@ -62,6 +63,9 @@ public class ImportDataValueAction
 
     @Autowired
     private CurrentUserService currentUserService;
+    
+    @Autowired
+    private SessionFactory sessionFactory;
 
     @Autowired
     private Scheduler scheduler;
@@ -160,7 +164,7 @@ public class ImportDataValueAction
         
         log.info( options );
 
-        scheduler.executeTask( new ImportDataValueTask( dataValueSetService, in, options, taskId, importFormat ) );
+        scheduler.executeTask( new ImportDataValueTask( dataValueSetService, sessionFactory, in, options, taskId, importFormat ) );
 
         return SUCCESS;
     }
