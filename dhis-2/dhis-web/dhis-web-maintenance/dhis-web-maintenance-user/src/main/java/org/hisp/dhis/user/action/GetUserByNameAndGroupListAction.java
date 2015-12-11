@@ -26,8 +26,7 @@ package org.hisp.dhis.user.action;
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-
-import static org.apache.commons.lang.StringUtils.isNotBlank;
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -35,14 +34,14 @@ import java.util.HashSet;
 import java.util.List;
 
 import org.hisp.dhis.paging.ActionPagingSupport;
-//import org.hisp.dhis.system.util.FilterUtils;
-import org.hisp.dhis.commons.filter.FilterUtils;
 import org.hisp.dhis.user.CurrentUserService;
 import org.hisp.dhis.user.User;
 import org.hisp.dhis.user.UserCredentials;
 import org.hisp.dhis.user.UserGroup;
 import org.hisp.dhis.user.UserGroupService;
+import org.hisp.dhis.user.UserQueryParams;
 import org.hisp.dhis.user.UserService;
+//import org.hisp.dhis.system.util.FilterUtils;
 
 /**
  * @author Torgeir Lorange Ostby
@@ -170,15 +169,52 @@ public class GetUserByNameAndGroupListAction
     public String execute()
         throws Exception
     {
-		/*
+        
         if ( isNotBlank( key ) ) // Filter on key only if set
         {            
+            UserQueryParams params = new UserQueryParams();
+            
+            params.setQuery( key );
+            
+            int count = userService.getUserCount( params );
+            
+            this.paging = createPaging( count );
+            params.setFirst( paging.getStartPos() );
+            params.setMax( paging.getPageSize() );
+            
+            users = userService.getUsers( params );
+            
+            /*
             this.paging = createPaging( userService.getUserCountByName( key ) );            
             users = userService.getUserByNameAndGroup( key,null, paging.getStartPos(), paging.getPageSize() );
+            */
+                        
         } 
         else if( isNotBlank( type ) )
         {
+            UserQueryParams params = new UserQueryParams();
+            int count = userService.getUserCount( params );
+            
+            this.paging = createPaging( count );
+            
+            if(!type.equalsIgnoreCase( "-1" ))
+            {
+               
+                users = userService.getUserByNameAndGroup( key,type, paging.getStartPos(), paging.getPageSize() );
+            }
+            
+            else
+            {        
+                params.setFirst( paging.getStartPos() );
+                params.setMax( paging.getPageSize() );
+                
+                users = userService.getUsers( params );
+            }
+            
+            
+            /*
             this.paging = createPaging( userService.getUserCount() ); 
+            
             if(!type.equalsIgnoreCase( "-1" ))
             {
                
@@ -189,17 +225,30 @@ public class GetUserByNameAndGroupListAction
                 users = new HashSet<User>( userService.getAllUsersBetween( paging.getStartPos(),
                     paging.getPageSize() ) );
             }
+            */
+            
         }
         else
         {
-            this.paging = createPaging( userService.getUserCount() );            
+            UserQueryParams params = new UserQueryParams();
+            
+            int count = userService.getUserCount( params );
+            
+            this.paging = createPaging( count );
+            params.setFirst( paging.getStartPos() );
+            params.setMax( paging.getPageSize() );
+            
+            users = userService.getUsers( params );
+           
+            /*
+           this.paging = createPaging( userService.getUserCount() );            
             users = new HashSet<User>( userService.getAllUsersBetween( paging.getStartPos(),
                 paging.getPageSize() ) );
+            */     
         }		
 
-        userService.canUpdateFilter( userCredentialsList );
-		*/
-
+        //userService.canUpdateFilter( userCredentialsList );
+		
         currentUserName = currentUserService.getCurrentUsername();
                
         userGroupList = new ArrayList<UserGroup>(userGroupService.getAllUserGroups());

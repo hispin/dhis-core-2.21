@@ -28,19 +28,20 @@ package org.hisp.dhis.dataset;
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import static org.hisp.dhis.common.IdentifiableObjectUtils.getUids;
 import static org.hisp.dhis.i18n.I18nUtils.i18n;
 
-import java.util.List;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.hisp.dhis.i18n.I18nService;
-import org.springframework.transaction.annotation.Transactional;
 import org.hisp.dhis.organisationunit.OrganisationUnit;
 import org.hisp.dhis.organisationunit.OrganisationUnitService;
 import org.hisp.dhis.user.CurrentUserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 
 
 /**
@@ -76,7 +77,7 @@ public class DefaultSectionService
         this.dataSetService = dataSetService;
     }
 
-	@Autowired
+   @Autowired
     private OrganisationUnitService organisationUnitService;
     
     @Autowired
@@ -135,13 +136,22 @@ public class DefaultSectionService
     {
     	Set<OrganisationUnit> organisationUnits = new HashSet<OrganisationUnit>( section.getSources() );
     
-    	Set<OrganisationUnit> userOrganisationUnits = new HashSet<OrganisationUnit>();
-    
+    	 Set<OrganisationUnit> userOrganisationUnits = new HashSet<OrganisationUnit>();
+    	
+    	 List<String> parentIds = getUids( currentUserService.getCurrentUser().getOrganisationUnits() );
+    	 
+    	 userOrganisationUnits = new HashSet<OrganisationUnit>( organisationUnitService.getOrganisationUnitsWithChildren( parentIds, null) );
+    	 
+         //List<OrganisationUnit> organisationUnitsWithChildren = getOrganisationUnitsWithChildren( parentIds, maxLevels );
+    	
+    	/*
     	for ( OrganisationUnit organisationUnit : currentUserService.getCurrentUser().getOrganisationUnits() )
     	{
-    		//userOrganisationUnits.addAll( organisationUnitService.getOrganisationUnitsWithChildren( organisationUnit.getUid() ) );
+    	    //userOrganisationUnits.addAll( organisationUnitService.getOrganisationUnitsWithChildren( organisationUnit.getUid() ) );
+    	    //userOrganisationUnits.addAll( organisationUnitService.getOrganisationUnitWithChildren( organisationUnit.getId() ) );
     	}
-     
+        */
+         
     	organisationUnits.removeAll( userOrganisationUnits );
     	organisationUnits.addAll( mergeOrganisationUnits );
      

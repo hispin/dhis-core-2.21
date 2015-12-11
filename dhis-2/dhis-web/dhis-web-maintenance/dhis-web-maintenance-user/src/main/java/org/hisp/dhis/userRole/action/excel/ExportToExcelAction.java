@@ -222,10 +222,15 @@ public class ExportToExcelAction
             for(UserCredentials userCredentials : userAuGrp.getMembers())
             {
             	sheet2rowCount++;
+            	
             	sheet2.addCell( new Label( sheet2colStart + sheet2colCount - 1, sheet2rowStart + sheet2rowCount, userAuGrp.getName(), getCellFormat2() ) );
             	sheet2.addCell( new Label( sheet2colStart+1 + sheet2colCount - 1, sheet2rowStart + sheet2rowCount, userCredentials.getUsername(), getCellFormat2() ) );
+            	/*
             	sheet2.addCell( new Label( sheet2colStart+2 + sheet2colCount - 1, sheet2rowStart + sheet2rowCount, userCredentials.getUser().getFirstName(), getCellFormat2() ) );
             	sheet2.addCell( new Label( sheet2colStart+3 + sheet2colCount - 1, sheet2rowStart + sheet2rowCount, userCredentials.getUser().getSurname(), getCellFormat2() ) );
+            	*/
+                sheet2.addCell( new Label( sheet2colStart+2 + sheet2colCount - 1, sheet2rowStart + sheet2rowCount, userCredentials.getUserInfo().getFirstName(), getCellFormat2() ) );
+                sheet2.addCell( new Label( sheet2colStart+3 + sheet2colCount - 1, sheet2rowStart + sheet2rowCount, userCredentials.getUserInfo().getSurname(), getCellFormat2() ) );
             }
             
         }
