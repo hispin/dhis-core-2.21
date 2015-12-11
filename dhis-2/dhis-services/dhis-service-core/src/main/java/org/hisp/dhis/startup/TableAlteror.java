@@ -860,6 +860,10 @@ public class TableAlteror
         
         executeSql( "alter table programindicator drop column missingvaluereplacement" );
         
+        executeSql( "update keyjsonvalue set namespacekey = key where namespacekey is null" );
+        executeSql( "alter table keyjsonvalue alter column namespacekey set not null" );
+        executeSql( "alter table keyjsonvalue drop column key" );
+
         // Remove data mart
         executeSql( "drop table aggregateddatasetcompleteness" );
         executeSql( "drop table aggregateddatasetcompleteness_temp" );
