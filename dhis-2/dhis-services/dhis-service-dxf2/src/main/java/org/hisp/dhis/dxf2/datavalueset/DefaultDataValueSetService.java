@@ -43,6 +43,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 
 import org.amplecode.quick.BatchHandler;
@@ -60,7 +61,6 @@ import org.hisp.dhis.commons.util.DebugUtils;
 import org.hisp.dhis.dataelement.DataElement;
 import org.hisp.dhis.dataelement.DataElementCategoryOptionCombo;
 import org.hisp.dhis.dataelement.DataElementCategoryService;
-import org.hisp.dhis.dataelement.DataElementService;
 import org.hisp.dhis.dataset.CompleteDataSetRegistration;
 import org.hisp.dhis.dataset.CompleteDataSetRegistrationService;
 import org.hisp.dhis.dataset.DataSet;
@@ -114,9 +114,6 @@ public class DefaultDataValueSetService
     @Autowired
     private IdentifiableObjectManager identifiableObjectManager;
     
-    @Autowired
-    private DataElementService dataElementService;
-
     @Autowired
     private DataElementCategoryService categoryService;
 
@@ -587,6 +584,7 @@ public class DefaultDataValueSetService
         CachingMap<String, Boolean> dataElementOrgUnitMap = new CachingMap<>();
         CachingMap<String, Boolean> dataElementOpenFuturePeriodsMap = new CachingMap<>();
         CachingMap<String, Boolean> orgUnitInHierarchyMap = new CachingMap<>();
+        CachingMap<String, Optional<Set<String>>> dataElementOptionsMap = new CachingMap<>();
 
         //----------------------------------------------------------------------
         // Load meta-data maps
@@ -735,18 +733,17 @@ public class DefaultDataValueSetService
                 continue;
             }
 
-            boolean inUserHierarchy = orgUnitInHierarchyMap.get( orgUnit.getUid(), 
-                () -> organisationUnitService.isInUserHierarchy( orgUnit.getUid(), currentOrgUnits ) );
-            
+
+            boolean inUserHierarchy = orgUnitInHierarchyMap.get( orgUnit.getUid(), () -> orgUnit.isDescendant( currentOrgUnits ) );
+
             if ( !inUserHierarchy )
             {
                 summary.getConflicts().add( new ImportConflict( orgUnit.getUid(), "Organisation unit not in hierarchy of current user: " + currentUser ) );
                 continue;
             }
-            
-            boolean invalidFuturePeriod = period.isFuture() && dataElementOpenFuturePeriodsMap.get( dataElement.getUid(),
-                () -> dataElementService.isOpenFuturePeriods( dataElement.getId() ) );
-            
+
+            boolean invalidFuturePeriod = period.isFuture() && !dataElementOpenFuturePeriodsMap.get( dataElement.getUid(), () -> dataElement.getOpenFuturePeriods() > 0 );
+
             if ( invalidFuturePeriod )
             {
                 summary.getConflicts().add( new ImportConflict( period.getIsoDate(), "Data element does not allow for future periods through data sets: " + dataElement.getUid() ) );
@@ -771,6 +768,15 @@ public class DefaultDataValueSetService
             if ( commentValid != null )
             {
                 summary.getConflicts().add( new ImportConflict( "Comment", i18n.getString( commentValid ) ) );
+                continue;
+            }
+
+            Optional<Set<String>> optionCodes = dataElementOptionsMap.get( dataElement.getUid(), () -> dataElement.hasOptionSet() ? 
+                Optional.of( dataElement.getOptionSet().getOptionCodesAsSet() ) : Optional.empty() );
+            
+            if ( optionCodes.isPresent() && !optionCodes.get().contains( dataValue.getValue() ) )
+            {
+                summary.getConflicts().add( new ImportConflict( dataValue.getValue(), "Data value is not a valid option of the data element option set: " + dataElement.getUid() ) );
                 continue;
             }
 

@@ -29,6 +29,8 @@ package org.hisp.dhis.dxf2.datavalueset.tasks;
  */
 
 import org.hisp.dhis.security.SecurityContextRunnable;
+import org.hibernate.SessionFactory;
+import org.hisp.dhis.dbms.DbmsUtils;
 import org.hisp.dhis.dxf2.common.ImportOptions;
 import org.hisp.dhis.dxf2.datavalueset.DataValueSetService;
 import org.hisp.dhis.scheduling.TaskId;
@@ -48,6 +50,8 @@ public class ImportDataValueTask
 
     private DataValueSetService dataValueSetService;
 
+    private SessionFactory sessionFactory;
+    
     private InputStream inputStream;
 
     private final ImportOptions options;
@@ -55,10 +59,12 @@ public class ImportDataValueTask
     private final TaskId taskId;
 
     private final String format;
-
-    public ImportDataValueTask( DataValueSetService dataValueSetService, InputStream inputStream, ImportOptions options, TaskId taskId, String format )
+    
+	public ImportDataValueTask( DataValueSetService dataValueSetService, SessionFactory sessionFactory,
+        InputStream inputStream, ImportOptions options, TaskId taskId, String format )
     {
         this.dataValueSetService = dataValueSetService;
+        this.sessionFactory = sessionFactory;
         this.inputStream = inputStream;
         this.options = options;
         this.taskId = taskId;
@@ -84,5 +90,17 @@ public class ImportDataValueTask
         {
             dataValueSetService.saveDataValueSet( inputStream, options, taskId );
         }
+    }
+    
+    @Override
+    public void before()
+    {
+        DbmsUtils.bindSessionToThread( sessionFactory );
+    }
+    
+    @Override
+    public void after()
+    {
+        DbmsUtils.unbindSessionFromThread( sessionFactory );
     }
 }

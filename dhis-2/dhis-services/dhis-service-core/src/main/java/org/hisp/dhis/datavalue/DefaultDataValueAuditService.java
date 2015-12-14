@@ -65,6 +65,12 @@ public class DefaultDataValueAuditService
     {
         dataValueAuditStore.addDataValueAudit( dataValueAudit );
     }
+    
+    @Override
+    public void deleteDataValueAudits( OrganisationUnit organisationUnit )
+    {
+        dataValueAuditStore.deleteDataValueAudits( organisationUnit );
+    }
 
     @Override
     @Transactional
