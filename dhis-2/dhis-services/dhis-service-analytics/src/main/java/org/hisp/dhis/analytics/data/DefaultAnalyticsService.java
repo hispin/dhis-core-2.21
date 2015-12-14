@@ -1428,7 +1428,7 @@ public class DefaultAnalyticsService
                 {
                     OrganisationUnit unit = (OrganisationUnit) object;
                     
-                    map.putAll( NameableObjectUtils.getUidDisplayPropertyMap( unit.getAncestors(), params.getDisplayProperty() ) );
+                    map.putAll( NameableObjectUtils.getUidDisplayPropertyMap( unit.getParents(), params.getDisplayProperty() ) );
                 }
             }
 
