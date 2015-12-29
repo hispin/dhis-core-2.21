@@ -61,6 +61,9 @@ public class InitTableAlteror
         executeSql( "update dataelement set domaintype='AGGREGATE' where domaintype='aggregate' or domaintype is null;" );
         executeSql( "update dataelement set domaintype='TRACKER' where domaintype='patient';" );
         executeSql( "update users set invitation = false where invitation is null" );
+        executeSql( "update users set selfregistered = false where selfregistered is null" );
+        executeSql( "update users set externalauth = false where externalauth is null" );
+        executeSql( "update users set disabled = false where disabled is null" );
         executeSql( "alter table dataelement alter column domaintype set not null;" );
         executeSql( "alter table programstageinstance alter column  status  type varchar(25);" );
         executeSql( "UPDATE programstageinstance SET status='ACTIVE' WHERE status='0';" );
