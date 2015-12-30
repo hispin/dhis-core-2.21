@@ -532,23 +532,18 @@ public abstract class AbstractEventService
             throw new IllegalQueryException( "Org unit is specified but does not exist: " + orgUnit );
         }
         
-        if( ou != null && !organisationUnitService.isInUserHierarchy( ou ) )
+        if ( ou != null && !organisationUnitService.isInUserHierarchy( ou ) )
         {                
             if( !userCredentials.isSuper() && !userCredentials.isAuthorized( "F_TRACKED_ENTITY_INSTANCE_SEARCH_IN_ALL_ORGUNITS" ) ) 
             {
                 throw new IllegalQueryException( "User has no access to organisation unit: " + ou.getUid() );
             }
         }
-        
-        if( pr == null &&  !userCredentials.isSuper() && userCredentials.getAllPrograms().size() == 0 )
-        {
-            throw new IllegalQueryException( "User has no access to programs");
-        }
-        
-        if( pr != null && userCredentials.getAllPrograms().contains( pr ) )
+
+        if ( pr != null && !userCredentials.isSuper() && !userCredentials.canAccessProgram( pr ) )
         {
             throw new IllegalQueryException( "User has no access to program: " + pr.getUid() );
-        }        
+        }
 
         TrackedEntityInstance tei = entityInstanceService.getTrackedEntityInstance( trackedEntityInstance );
 
