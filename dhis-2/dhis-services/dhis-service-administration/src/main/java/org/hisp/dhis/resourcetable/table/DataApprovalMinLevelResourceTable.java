@@ -103,12 +103,10 @@ public class DataApprovalMinLevelResourceTable
     @Override
     public List<String> getCreateIndexStatements()
     {
-        String sql = 
-            "create index in_dataapprovalminlevel_datasetid_" + getRandomSuffix() + " on " + getTempTableName() + "(datasetid);" +
-            "create index in_dataapprovalminlevel_periodid_" + getRandomSuffix() + " on " + getTempTableName() + "(periodid);" +
-            "create index in_dataapprovalminlevel_organisationunitid_" + getRandomSuffix() + " on " + getTempTableName() + "(organisationunitid);" +
-            "create index in_dataapprovalminlevel_attributeoptioncomboid_" + getRandomSuffix() + " on " + getTempTableName() + "(attributeoptioncomboid);";
-        
-        return Lists.newArrayList( sql );        
+        return Lists.newArrayList(
+            "create index in_dataapprovalminlevel_datasetid_" + getRandomSuffix() + " on " + getTempTableName() + "(datasetid);",
+            "create index in_dataapprovalminlevel_periodid_" + getRandomSuffix() + " on " + getTempTableName() + "(periodid);",
+            "create index in_dataapprovalminlevel_organisationunitid_" + getRandomSuffix() + " on " + getTempTableName() + "(organisationunitid);",
+            "create index in_dataapprovalminlevel_attributeoptioncomboid_" + getRandomSuffix() + " on " + getTempTableName() + "(attributeoptioncomboid);" );      
     }
 }
