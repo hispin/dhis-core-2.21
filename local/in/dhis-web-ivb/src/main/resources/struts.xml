@@ -476,20 +476,16 @@
 		class="org.hisp.dhis.ivb.report.action.GenerateVaccineIntroReportAction">
 		<result name="success" type="velocity">/dhis-web-ivb/main.vm</result>
 		<param name="page">/dhis-web-ivb/vaccineIntroReportOutput.vm</param>
-		<param name="javascripts">
-			javascript/ivb-dataentry.js,javascript/jquerycssmenu.js,javascript/request.js,javascript/jquery.treeview.js,../dhis-web-commons/select2/select2.min.js</param>
-		<param name="stylesheets">
-			css/ivb-dataentry.css,css/jquery.fancybox.css,css/jquerycssmenu.css,css/jquery.treeview.css,../dhis-web-commons/select2/select2.css</param>
+		<param name="javascripts">javascript/ivb-dataentry.js,javascript/jquerycssmenu.js,javascript/request.js,javascript/jquery.treeview.js,../dhis-web-commons/select2/select2.min.js</param>
+		<param name="stylesheets">css/ivb-dataentry.css,css/jquery.fancybox.css,css/jquerycssmenu.css,css/jquery.treeview.css,../dhis-web-commons/select2/select2.css</param>
 	</action>
 	
 	<action name="generateVaccineIntroReportCommentWise"
 		class="org.hisp.dhis.ivb.report.action.GenerateVaccineIntroReportCommentWiseAction">
 		<result name="success" type="velocity">/dhis-web-ivb/main.vm</result>
 		<param name="page">/dhis-web-ivb/vaccineIntroWithCommentOutput.vm</param>
-		<param name="javascripts">
-			javascript/ivb-dataentry.js,javascript/jquerycssmenu.js,javascript/request.js,javascript/jquery.treeview.js,../dhis-web-commons/select2/select2.min.js</param>
-		<param name="stylesheets">
-			css/ivb-dataentry.css,css/jquery.fancybox.css,css/jquerycssmenu.css,css/jquery.treeview.css,../dhis-web-commons/select2/select2.css</param>
+		<param name="javascripts">javascript/ivb-dataentry.js,javascript/jquerycssmenu.js,javascript/request.js,javascript/jquery.treeview.js,../dhis-web-commons/select2/select2.min.js</param>
+		<param name="stylesheets">css/ivb-dataentry.css,css/jquery.fancybox.css,css/jquerycssmenu.css,css/jquery.treeview.css,../dhis-web-commons/select2/select2.css</param>
 	</action>
 
     <!--  GAVI Applications Report -->
@@ -886,6 +882,14 @@
         <param name="stylesheets">../dhis-web-commons/javascripts/ext/resources/css/ext-plugin-gray.css,css/ivb-dataentry.css,css/jquery.fancybox.css,css/jquerycssmenu.css,css/jquery.treeview.css,../dhis-web-commons/select2/select2.css</param>
     </action>
 
+    <!-- User Activity Login Report -->
+     <action name="userActivityLoginReport" class="org.hisp.dhis.ivb.report.action.GenerateUserAcitivityLoginReportAction">
+        <result name="success" type="velocity">/dhis-web-ivb/main.vm</result>
+        <param name="page">/dhis-web-ivb/userActivityLoginReportResult.vm</param>
+        <param name="javascripts">../dhis-web-commons/javascripts/ext/ext-all.js,javascript/jquery.treeview.js,javascript/TransformGrid.js,javascript/jquerycssmenu.js,../dhis-web-commons/select2/select2.min.js,javascript/exportExcel.js</param>
+        <param name="stylesheets">../dhis-web-commons/javascripts/ext/resources/css/ext-plugin-gray.css,css/ivb-dataentry.css,css/jquery.fancybox.css,css/jquerycssmenu.css,css/jquery.treeview.css,../dhis-web-commons/select2/select2.css</param>
+    </action>
+
     <!--  Aggregation Engine -->
     <action name="aggregationQueryList" class="org.hisp.dhis.ivb.aggregation.action.AggregationQueryListAction">
         <result name="success" type="velocity">/dhis-web-ivb/main.vm</result>
@@ -1047,7 +1051,7 @@
 			F_DATAVALUE_AUDIT_EDIT,F_DATAVALUE_AUDIT_HIDE,F_DATAVALUE_AUDIT_DELETE,
 			F_HIDE_UNHIDE_DATAVALUEAUDIT,F_DATAVALUE_CONFLICT,
 			F_USER_REPORT_VIEW,F_DATAVALUE_ADD,F_DATAVALUE_UPDATE,
-			F_AGG_ENGINE_VIEW,F_OPEN_CLOSE_DISCUSSION,F_DATAVALUE_DELETE,F_DATAVALUE_VIEW_COMMENT,F_LOOKUP_VIEW,F_PROG_REVIEW_TECH_ASSISTANCE_REPORT,F_CMYP_DEV_TRACKING_REPORT,F_ALERT_REPORT</param>
+			F_AGG_ENGINE_VIEW,F_OPEN_CLOSE_DISCUSSION,F_DATAVALUE_DELETE,F_DATAVALUE_VIEW_COMMENT,F_LOOKUP_VIEW,F_PROG_REVIEW_TECH_ASSISTANCE_REPORT,F_CMYP_DEV_TRACKING_REPORT,F_ALERT_REPORT,F_USERACTIVITY_LOGIN_REPORT</param>
 	</action>
 
 	

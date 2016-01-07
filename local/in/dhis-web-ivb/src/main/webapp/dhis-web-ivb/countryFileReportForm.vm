@@ -1,7 +1,12 @@
 <script type="text/javascript">
 	$(document).ready(function(){
 	    $('#myjquerymenu').find('#report').addClass("selected");
-	    pageName = 'CountryFileReport';	 
+	    pageName = 'CountryFileReport';
+	    
+	    //selectionTreeSelection.setListenerFunction( getOrgUnitId ); 
+        selectionTreeSelection.setMultipleSelectionAllowed( false );
+        selectionTree.buildSelectionTree();
+        
 	    $("#submit").button(); 
 	    $("#cancel").button(); 		    
 	});
@@ -54,21 +59,24 @@
 
 <br/>
 
-<div style="font-size:16px; width:93%; margin:auto;" class="ui-widget-header ui-corner-all"><b>$i18n.getString( "country_file" )</b> ($i18n.getString( "show_dataelement_values_and_comment" ))</div>
+<div style="font-size:16px; width:93%; margin:auto;" class="ui-widget-header ui-corner-all"><b>$i18n.getString( "country_file_report" )</b> ($i18n.getString( "show_dataelement_values_and_comment" ))</div>
 
 <form id="countryFileForm" method="get" action="generateHTMLReport.action" onsubmit="return generateHTMLreport()">
 
  	<input type="hidden" name="orgUnitId" id="orgUnitId"/>
 
- 	<div id="reportFilterDiv" >
-
+ 	<div id="reportFilterDiv" >            
  		<table style="width:90%;margin:auto;" cellpadding="4" cellspacing="2">
  			<tr>
+ 			
  				<td width="40%">
  					$i18n.getString( "select_country" )<br/>
+ 					<div id="selectionTree" class="ui-widget-content ui-corner-all" style="height: 166px; width: 375px; overflow:auto;"></div>
+ 					<!--
  					<div id="orgUnitTreeContainer" class="ui-widget-content ui-corner-all" style="height: 166px; width: 375px; overflow:auto;">
  						<div id="selectionTree" ></div>
  					</div>
+ 					--->
 				 </td>				 
  				 <td width="10%">&nbsp;</td>
 				 <td width="40%">

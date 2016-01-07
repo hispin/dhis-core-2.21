@@ -399,18 +399,100 @@ table.tablesorter tr.odd td:hover {
         
         <h2>Pneumo-Rota Operational Working Group</h2>
         <h3>Introduction dates: $!introStartDate to $!introEndDate</h3>
+        
+        <h3>GAVI Applications</h3>
+        <table id="table1" class="tablesorter" cellspacing="0" cellpadding="3" style="width:100%;">
+        
+            <thead>
+                <tr width="100%" bgcolor="#A9D0F5">
+                    <th align="left" style="width:3%;display:none;">$i18n.getString( "iso_code" )</th>
+                    <th align="left" style="width:10%;">$i18n.getString( "who_region" )</th>
+                    <th align="left" style="width:10%;display:none;">$i18n.getString( "unicef_region" )</th>
+                    <th align="left" style="width:10%;">$i18n.getString( "country" )</th>
+                    <th align="left" style="width:12%;display:none;">$i18n.getString( "income_level" )</th>
+                    <th align="left" style="width:12%;display:none;">$i18n.getString( "gavi_eligibility_status" )</th>
+                    <th align="left" style="width:12%;">$i18n.getString( "vaccines" )</th>
+                    <th align="left" style="width:12%;">$i18n.getString( "application_year_month" )</th>
+                    <th align="left" style="width:12%;">$i18n.getString( "application_status" )</th>
+                    <!--<th align="left" style="width:12%;">$i18n.getString( "support_status" )</th>-->
+                </tr>
+            </thead>
+            
+            <tbody id="list">
+                #foreach( $orgUnit in $gaviApplicationsOrgUnitList )                    
+                    #set( $sectionResultMap = $gaviOrgUnitResultMap.get( $orgUnit ) )
+                    #foreach( $dataSetSection in $gaviDataSetSections )
+                        #set( $valueResultMap = $sectionResultMap.get( $dataSetSection.name ) )
+                        #if($valueResultMap.get( $gaviAppYearMonthDEGroup.id ) && $valueResultMap.get( $gaviAppYearMonthDEGroup.id ) != " " && $valueResultMap.get( $gaviAppStatus.id ) && $valueResultMap.get( $gaviAppStatus.id ) != " ")
+                        <tr width="100%" bgcolor="#FBEFEF">
+                            <td style="display:none;">$orgUnit.code</td>
+                            <td align="left"  >$!orgUnit.getParent().shortName</td>
+                            <td style="display:none;">$orgUnit.getGroupInGroupSet( $unicefRegionsGroupSet ).getShortName()</td>
+                            <td align="left" >$!orgUnit.name</td>
+                            
+                            #set( $headergetter = "" )
+                            #set( $headergetter = "$orgUnit.id:3" )
+                            #if('$!headerDataValueMap.get($headergetter)' != 'null' )
+                                <td style="display:none;">$!headerDataValueMap.get($headergetter).value</td>
+                            #else   
+                                <td style="display:none;">&nbsp;</td>
+                            #end
+    
+                            #set( $headergetter = "" )
+                            #set( $headergetter = "$orgUnit.id:4" )
+                            #if('$!headerDataValueMap.get($headergetter)' != 'null' )
+                                <td style="display:none;">$!headerDataValueMap.get($headergetter).value</td>
+                            #else   
+                                <td style="display:none;">&nbsp;</td>
+                            #end
+                            
+                            <td align="left"  ><a href="loadSingleCoutryEntryForm.action?dataSetSectionId=$dataSetSection.id&orgUnitUid=$orgUnit.uid">$!dataSetSection.displayName</a></td>
+							#set( $splitNumber = 0)
+							#set($comment1 = "")
+							#set($value1 = "")
+							#foreach($valueList in $valueResultMap.get( $!gaviAppYearMonthDEGroup.id ).split(':'))
+                                #if($splitNumber == 0)
+								    #set($value1 = $valueList)
+								    #set( $splitNumber = $splitNumber + 1)
+							     #else
+								    #set($comment1 = $valueList)
+							     #end
+							#end
+							<td align="left"  #if(${comment1} != '') style="color:green;" title="$!{comment1}" #end  >$!{value1}</td>
+                            
+                            #set( $splitNumber = 0)
+							#set($comment2 = "")
+							#set($value2 = "" )
+							#foreach($valueList in $valueResultMap.get( $!gaviAppStatus.id ).split(':'))
+							#if($splitNumber == 0)
+								#set($value2 = $valueList)
+								#set( $splitNumber = $splitNumber + 1)
+							#else								
+								#set($comment2 = $valueList)
+							#end
+							#end							
+                           <td align="left"  #if(${comment2} != '') style="color:green;" title="$!{comment2}" #end >$!{value2}</td>	                                
+							
+                        </tr>
+                        #end
+                    #end
+                #end
+            </tbody>
+        </table>
+        <br/>
+        <h2>Vaccine Introductions</h2>
         #set( $tableCount = 0 )
     	#foreach( $key in $dataElementMap.keySet() )
     	   #set( $tableCount = $tableCount + 1 )
     		#set( $keyOuSet = $vaccineOrgunitMap.get( $key ) )
     		#set( $dataSetSection = $sectionMap.get( $key ) )
-    		<br/>
+    		
     		<h3>$key</h3>
             <table class="tablesorter" id="vicd_table$tableCount" >
                 <thead>
                     <tr>
                     	#if( $isoCode == "ON" ) <th align="left" style="display:none;vertical-align: middle;">ISO Code</th>#end
-	                    #if( $whoRegion == "ON" )<th align="left" style="vertical-align: middle;">$i18n.getString( "who_region" )</th>#end
+	                    #if( $whoRegion == "ON" ) <th align="left" style="vertical-align: middle;">$i18n.getString( "who_region" )</th>#end
 	                   	#if( $unicefRegion == "ON" )  <th align="left" style="vertical-align: middle;display:none">$i18n.getString( "unicef_region" )</th>#end
 						
 	                    <th align="left" style="vertical-align: middle;">$i18n.getString( "country" )</th>
@@ -521,6 +603,7 @@ table.tablesorter tr.odd td:hover {
 				#end
         </tbody>
     </table>
+    <br/>
     <script>
                         $(document).ready(function()
                         { 

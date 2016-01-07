@@ -119,6 +119,10 @@
 			{
 				document.getElementById("userActivity").style.display = 'block';
 			}
+			if(jQuery.trim(auth.userActivityLogin) == "Yes")
+			{
+				document.getElementById("userActivityLogin").style.display = 'block';
+			}
 			if(jQuery.trim(auth.dashboard) == "Yes")
 			{
 				document.getElementById("userDashboard").style.display = 'block';
@@ -534,6 +538,7 @@
                     <li><a href="agendaReportForm.action"><b>$i18n.getString( "agenda_report" )</b></a></li>
                     <li><a href="toolBoxReportForm.action"><b>$i18n.getString( "toolbox_flag_report" )</b></a></li>
                     <li id="userActivity" style="display:none;"><a href="userActivityReportForm.action"><b>$i18n.getString( "user_activity_report" )</b></a></li>
+                    <li id="userActivityLogin" style="display:none;"><a href="userActivityLoginReport.action"><b>$i18n.getString( "user_activity_login_report" )</b></a></li>
 					<li><a href="vaccineIntroReport.action"><b>$i18n.getString( "vaccine_introduction_report" )</b></a></li>
 				</ul>
 			</li>

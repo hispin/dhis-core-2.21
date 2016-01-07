@@ -31,10 +31,10 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
-import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
+import java.util.Set;
 
 import org.hisp.dhis.common.comparator.IdentifiableObjectNameComparator;
 import org.hisp.dhis.configuration.ConfigurationService;
@@ -43,13 +43,12 @@ import org.hisp.dhis.dataset.DataSetService;
 import org.hisp.dhis.i18n.I18nService;
 import org.hisp.dhis.message.MessageService;
 import org.hisp.dhis.organisationunit.OrganisationUnit;
-import org.hisp.dhis.organisationunit.OrganisationUnitService;
 import org.hisp.dhis.oust.manager.SelectionTreeManager;
-import org.hisp.dhis.ouwt.manager.OrganisationUnitSelectionManager;
 import org.hisp.dhis.user.CurrentUserService;
 import org.hisp.dhis.user.User;
 import org.hisp.dhis.user.UserGroup;
 import org.hisp.dhis.user.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import com.opensymphony.xwork2.Action;
 
@@ -101,6 +100,9 @@ public class GetUserActivityReportFormAction
     {
         this.userService = userService;
     }
+    
+    @Autowired
+    private SelectionTreeManager selectionTreeManager;
     
     // -------------------------------------------------------------------------
     // Getters & Setters
@@ -237,6 +239,10 @@ public class GetUserActivityReportFormAction
         }
         
         Collections.sort( userList );
+        
+        Set<OrganisationUnit> currentUserOrgUnits = new HashSet<OrganisationUnit>( currentUserService.getCurrentUser().getDataViewOrganisationUnits() );
+        selectionTreeManager.setRootOrganisationUnits( currentUserOrgUnits );
+        selectionTreeManager.clearSelectedOrganisationUnits();
         
         return SUCCESS;
     }

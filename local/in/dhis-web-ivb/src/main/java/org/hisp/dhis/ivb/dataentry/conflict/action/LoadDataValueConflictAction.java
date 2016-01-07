@@ -452,6 +452,8 @@ public class LoadDataValueConflictAction implements Action
         
         period = periodService.reloadPeriod( period );
         
+        SimpleDateFormat standardDateFormat = new SimpleDateFormat( "yyyy-MM-dd" );
+        
         //System.out.println("Period: " + period.getId() );
         
         List<DataValue> conflictDataValueList = new ArrayList<DataValue>( ivbUtil.getConflictDataValueList( dataElementIdsByComma, orgUnitIdsByComma, period ) );
@@ -475,11 +477,18 @@ public class LoadDataValueConflictAction implements Action
                     dva.setValue("");
                 if( dva.getComment() ==  null )
                    dva.setComment( "" );
-                    
-                if( dva.getValue().equals( dv.getValue() ) && dva.getComment().equals( dv.getComment() ) && dva.getModifiedBy().equals( dv.getStoredBy() ) && dva.getTimestamp().equals( dv.getLastUpdated() ) )
+                
+                String dvaTimeStamp = standardDateFormat.format( dva.getTimestamp() );
+                String dvTimeStamp = standardDateFormat.format( dv.getLastUpdated() );
+                if( dvaTimeStamp == null )  dvaTimeStamp = "";
+                if( dvTimeStamp == null ) dvTimeStamp = "";
+                
+                //System.out.print( historyList.size() + " - " + dva.getValue() + "  " + dv.getValue() + "  " + dva.getComment() + "  " + dv.getComment() + "  " + dva.getModifiedBy() + "  " + dv.getStoredBy() + "  " + dvaTimeStamp + "  " + dvTimeStamp );
+                if( dva.getValue().trim().equals( dv.getValue().trim() ) && dva.getComment().trim().equals( dv.getComment().trim() ) && dva.getModifiedBy().trim().equals( dv.getStoredBy().trim() ) && dvaTimeStamp.trim().equals( dvTimeStamp.trim() ) )
                 {
+                	//System.out.println( " DV and DVA are same, removing duplicate one" );
                     iterator.remove();
-                    break;
+                    //break;
                 }
             }
             

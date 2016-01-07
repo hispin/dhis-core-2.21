@@ -21,6 +21,12 @@ jQuery(function() {
        }
     });
 });
+
+$(function() {
+		$( document ).tooltip({
+			track: true
+		});
+	});
 </script>
 
 <script>
@@ -132,12 +138,15 @@ jQuery(function() {
 					<th align="left">$i18n.getString( "intro_year" )</th>
 					#foreach( $dataElementGroup in $dataElementGroups )
 						<th align="left">$!dataElementGroup.displayName</th>
+						<th align="left">Comment of $!dataElementGroup.displayName</th>
 					#end
 				</tr>
 			</thead>
 			<tbody id="list">
 				#foreach( $orgUnit in $orgUnitList )
 					#set( $sectionResultMap = $orgUnitResultMap.get( $orgUnit ) )
+					#set( $sectionCommentMap = $orgUnitCommentMap.get( $orgUnit ) )
+					
 					#set( $mark = false )
 					#foreach( $dataSetSection in $dataSetSections )
 						#if( $mark )
@@ -146,6 +155,8 @@ jQuery(function() {
 							#set( $mark = true )
 						#end
 						#set( $valueResultMap = $sectionResultMap.get( $dataSetSection.name ) )
+						#set( $valueCommentMap = $sectionCommentMap.get( $dataSetSection.name ) )
+						
 						#if($valueResultMap.get( $introYearDEGroup.id ) && $valueResultMap.get( $introYearDEGroup.id ) != " ")
 						<tr width="100%" #if( $mark ) bgcolor="#E0ECF8" #else bgcolor = "#FFFFFF" #end>
 							<td align="left">$!orgUnit.code</td>
@@ -161,6 +172,7 @@ jQuery(function() {
 							<td align="left">$!valueResultMap.get( $!introYearDEGroup.id )</td>
 							#foreach( $dataElementGroup in $dataElementGroups )								
                                 <td align="left">$!valueResultMap.get( $!dataElementGroup.id )</td>
+                                <td align="left">$!valueCommentMap.get( $!dataElementGroup.id )</td>
 							#end
 						</tr>
 						#end
@@ -195,10 +207,17 @@ jQuery(function() {
         <table class="altrowstable listTable" id="alternatecolor" cellspacing="0" cellpadding="0" style="margin:auto;table-layout:fixed;width:100%;">
             <thead>
                 <tr width="100%" bgcolor="#A9D0F5">
+					<!--
                     <th onclick="sorting()" align="left">$i18n.getString( "who_region" ) <img src="images/asc.gif" class="asc" style="display:block;float:right;"/><img src="images/desc.gif" class="desc" style="display:none;float:right;"/></th>
                     <th onclick="sorting()" align="left">$i18n.getString( "country" ) <img src="images/asc.gif" class="asc" style="display:block;float:right;"/><img src="images/desc.gif" class="desc" style="display:none;float:right;"/></th>
                     <th onclick="sorting()" align="left">$i18n.getString( "vaccines" ) <img src="images/asc.gif" class="asc" style="display:block;float:right;"/><img src="images/desc.gif" class="desc" style="display:none;float:right;"/></th>
                     <th onclick="sorting()" align="left">$i18n.getString( "intro_year" ) <img src="images/asc.gif" class="asc" style="display:block;float:right;"/><img src="images/desc.gif" class="desc" style="display:none;float:right;"/></th>
+                    -->
+                    <th onclick="sorting()" align="left">$i18n.getString( "who_region" ) <img src="images/asc.gif" class="asc" style="display:none;float:right;"/><img src="images/desc.gif" class="desc" style="display:none;float:right;"/></th>
+                    <th onclick="sorting()" align="left">$i18n.getString( "country" ) <img src="images/asc.gif" class="asc" style="display:none;float:right;"/><img src="images/desc.gif" class="desc" style="display:none;float:right;"/></th>
+                    <th onclick="sorting()" align="left">$i18n.getString( "vaccines" ) <img src="images/asc.gif" class="asc" style="display:none;float:right;"/><img src="images/desc.gif" class="desc" style="display:none;float:right;"/></th>
+                    <th onclick="sorting()" align="left">$i18n.getString( "intro_year" ) <img src="images/asc.gif" class="asc" style="display:none;float:right;"/><img src="images/desc.gif" class="desc" style="display:none;float:right;"/></th>
+
                     #foreach( $dataElementGroup in $dataElementGroups )
                         <th class="{sorter: false}" align="left">$!dataElementGroup.displayName</th>
                     #end
@@ -207,6 +226,8 @@ jQuery(function() {
             <tbody id="list">
                 #foreach( $orgUnit in $orgUnitList )
                     #set( $sectionResultMap = $orgUnitResultMap.get( $orgUnit ) )
+                    #set( $sectionCommentMap = $orgUnitCommentMap.get( $orgUnit ) )
+                    
                     #set( $mark = false )
                     #foreach( $dataSetSection in $dataSetSections )
                         #if( $mark )
@@ -215,6 +236,7 @@ jQuery(function() {
                             #set( $mark = true )
                         #end
                         #set( $valueResultMap = $sectionResultMap.get( $dataSetSection.name ) )
+                        #set( $valueCommentMap = $sectionCommentMap.get( $dataSetSection.name ) )
                         #if($valueResultMap.get( $introYearDEGroup.id ) && $valueResultMap.get( $introYearDEGroup.id ) != " ")
                         <tr width="100%" #if( $mark ) bgcolor="#E0ECF8" #else bgcolor = "#FFFFFF" #end>
                             <td align="left">$!orgUnit.getParent().shortName</td>
@@ -225,8 +247,10 @@ jQuery(function() {
                             </a>
                             </td>
                             <td align="left">$!valueResultMap.get( $!introYearDEGroup.id )</td>
-                            #foreach( $dataElementGroup in $dataElementGroups )                             
-                                <td align="left">$!valueResultMap.get( $!dataElementGroup.id )</td>
+                            #foreach( $dataElementGroup in $dataElementGroups )
+                            	#set( $comment = "" )
+                            	#set( $comment = $!valueCommentMap.get( $!dataElementGroup.id ) )
+                                <td align="left" #if(${comment} != '') style="color:green;" title="$!{comment}" #end>$!valueResultMap.get( $!dataElementGroup.id )</td>
                             #end
                         </tr>
                         #end

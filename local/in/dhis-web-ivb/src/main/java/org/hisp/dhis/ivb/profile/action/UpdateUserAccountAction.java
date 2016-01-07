@@ -173,6 +173,16 @@ public class UpdateUserAccountAction
 
         message = i18n.getString( "update_user_success" );
 
+        /*
+        for( User user1 : userService.getAllUsers() )
+        {
+            if ( rawPassword != null )
+            {
+                userService.encodeAndSetPassword( user1, rawPassword );
+            }
+        }
+        */
+        
         return SUCCESS;
     }
 }

@@ -167,6 +167,18 @@ public class GetUserAuthorityAction
 		this.alertReportAuthority = alertReportAuthority;
 	}
 
+	private String userActivityLoginReportAuthority;
+	
+	public String getUserActivityLoginReportAuthority() 
+	{
+		return userActivityLoginReportAuthority;
+	}
+
+	public void setUserActivityLoginReportAuthority(String userActivityLoginReportAuthority) 
+	{
+		this.userActivityLoginReportAuthority = userActivityLoginReportAuthority;
+	}
+
 	public String execute()
     {
         User curUser = currentUserService.getCurrentUser();
@@ -264,6 +276,15 @@ public class GetUserAuthorityAction
         	alertReportAuthority = "No";
         }
 
+        if ( userAuthorities.contains( "F_USERACTIVITY_LOGIN_REPORT" ) )
+        {
+        	userActivityLoginReportAuthority = "Yes";
+        }
+        else
+        {
+        	userActivityLoginReportAuthority = "No";
+        }
+        
         return SUCCESS;
     }
 }

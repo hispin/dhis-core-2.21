@@ -661,6 +661,10 @@ public class PieProgReviewTAReportResultAction implements Action
         	}
             //startDate = startDateParts[0] + "-10-01";
         }
+        else if( startDateParts.length == 2 && Integer.parseInt( startDateParts[1] ) >= 1 && Integer.parseInt( startDateParts[1] ) <= 12 )
+        {
+        	startDate = startDateParts[0] + curMonth + curDay;
+        }
         else
         {
             startDate = startDateParts[0] + "-" + startDateParts[1] + "-01";

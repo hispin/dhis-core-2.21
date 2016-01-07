@@ -7,5 +7,6 @@
 "maintenanceModules":"${maintenanceModuleAuthority}",
 "progReviewTAReportAuthority":"${progReviewTAReportAuthority}",
 "cmypDevTrackingReportAuthority":"${cmypDevTrackingReportAuthority}",
-"alertReportAuthority":"${alertReportAuthority}"
+"alertReportAuthority":"${alertReportAuthority}",
+"userActivityLogin":"${userActivityLoginReportAuthority}"
 }

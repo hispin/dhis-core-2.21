@@ -99,21 +99,28 @@ jQuery(function() {
 				<td width="10%">$!dataValueTimeStampMap.get('J3ZawRoVEu3')</td>
 			 </tr>
 			 <tr>
+			 	<!--
 				<td width="25%">$i18n.getString( "header_GINI" )</td>
 				<td width="15%">$!dataValue.get('t4bnfS6KuIY')</td>
 				<td width="10%">$!dataValueTimeStampMap.get('t4bnfS6KuIY')</td>
+				-->
+				<td width="25%">$i18n.getString( "header_dtp3_WUENIC" )</td>
+				<td id="WUENIC" width="15%">$!dataValue.get('TNr02MLZPCk')</td>
+				<td width="10%">$!dataValueTimeStampMap.get('TNr02MLZPCk')</td>
 				<td width="25%">$i18n.getString( "header_GAVI" )</td>
 				<td width="15%">$!dataValue.get('WaL6oz51P8X')</td>
 				<td width="10%">$!dataValueTimeStampMap.get('WaL6oz51P8X')</td>
 			</tr>
 			 <tr>
-				<td width="25%">$i18n.getString( "header_dtp3_WUENIC" )</td>
-				<td id="WUENIC" width="15%">$!dataValue.get('TNr02MLZPCk')</td>
-				<td width="10%">$!dataValueTimeStampMap.get('TNr02MLZPCk')</td>
+				
 				<td width="25%">$i18n.getString( "header_dtp3_JRF" )</td>
 				<td id="JRF" width="15%">$!dataValue.get('vqLla2ot9Nd')</td>
 				<td width="10%">$!dataValueTimeStampMap.get('vqLla2ot9Nd')</td>
+				<td width="25%">$i18n.getString( "header_cmyp_start_date_end_date" )</td>
+				<td width="15%">$!dataValue.get('hEdIGZdkIVs') - $!dataValue.get('bfM3Jv6PFpL')</td>
+				<td width="10%"></td>
 			</tr>
+			<!--
 			 <tr>
 				<td width="25%">$i18n.getString( "header_cmyp_start_date_end_date" )</td>
 				<td width="15%">$!dataValue.get('hEdIGZdkIVs') - $!dataValue.get('bfM3Jv6PFpL')</td>
@@ -122,6 +129,7 @@ jQuery(function() {
 				<td width="15%"></td>
 				<td width="10%"></td>
 			</tr>
+			-->
 		</table>
 
 		<hr/>

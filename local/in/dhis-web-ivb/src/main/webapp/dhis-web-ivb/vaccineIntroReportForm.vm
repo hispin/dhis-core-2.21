@@ -200,8 +200,8 @@ $(function() {
 			 			<option value="SHOW_BLANK_DES">$i18n.getString( "show_only_data_element_that_are_blank" )</option>			 			
 		 			</select>
 		 			&nbsp;&nbsp;
-		 			<input type="checkbox" name="showComment" id="showComment" onclick="getDataElementType()" checked/> $i18n.getString( "show_comment" )<br/><br/>
-		 			
+		 			<input type="checkbox" name="showComment" id="showComment" onclick="getDataElementType()" style="display:none;" /> <!--$i18n.getString( "show_comment" )-->
+		 			<br/><br/>
 		 			<input type="checkbox" name="isoCode" checked /> $i18n.getString( "iso_code" )<br/>
 		 			<input type="checkbox" name="whoRegion" checked /> $i18n.getString( "who_region" )<br/>
 		 			<input type="checkbox" name="unicefRegion" checked /> $i18n.getString( "unicef_region" )<br/>

@@ -3680,4 +3680,45 @@ public class IVBUtil
     	} );
     }
     
+    
+    public List<UserDetails> getUserDetails( )
+    {
+    	List<UserDetails> userDetails = new ArrayList<UserDetails>();
+    	SimpleDateFormat sd = new SimpleDateFormat( "yyyy-MM-dd HH:mm:ss" );
+        try
+        {
+            String query = "SELECT t1.username, t2.surname, t2.firstName, t2.email, t1.lastLogin FROM users t1 INNER JOIN userinfo t2 ON t1.userid = t2.userinfoid ORDER BY t1.lastLogin";
+
+            SqlRowSet rs = jdbcTemplate.queryForRowSet( query );
+
+            while ( rs.next() )
+            {
+            	UserDetails userDetail = new UserDetails();
+            	
+            	userDetail.setUserName( rs.getString(1) );
+            	userDetail.setSurName( rs.getString(2) );
+            	userDetail.setFirstName( rs.getString(3) );
+            	userDetail.setEmail( rs.getString(4) );
+            	
+            	try
+            	{
+            		Date d = rs.getDate(5);
+            		userDetail.setLastLogin( sd.format(d) );
+            	}
+            	catch( Exception e )
+            	{
+            		//System.out.println( "inside catch" );
+            		userDetail.setLastLogin( rs.getString(5) );
+            	}
+            		
+            	userDetails.add( userDetail );
+            }
+        }
+        catch ( Exception e )
+        {
+            throw new RuntimeException( "Exception in getHiddenDEListForGivenOrgnuit", e );
+        }
+
+        return userDetails;
+    }
 }

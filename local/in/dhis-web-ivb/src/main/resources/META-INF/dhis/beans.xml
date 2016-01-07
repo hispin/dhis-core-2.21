@@ -1304,6 +1304,18 @@
 		<property name="periodService" ref="org.hisp.dhis.period.PeriodService" />
 		<property name="userService" ref="org.hisp.dhis.user.UserService" />
 	</bean>
+	
+	<!-- User Activity Login Report -->
+	<bean
+		id="org.hisp.dhis.ivb.report.action.GenerateUserAcitivityLoginReportAction"
+		class="org.hisp.dhis.ivb.report.action.GenerateUserAcitivityLoginReportAction"
+		scope="prototype">
+		<property name="currentUserService" ref="org.hisp.dhis.user.CurrentUserService" />
+		<property name="i18nService" ref="org.hisp.dhis.i18n.I18nService" />
+		<property name="messageService" ref="org.hisp.dhis.message.MessageService" />
+		<property name="configurationService" ref="org.hisp.dhis.configuration.ConfigurationService" />
+		<property name="ivbUtil" ref="org.hisp.dhis.ivb.util.IVBUtil" />
+	</bean>
 
 	<!-- Alert Report -->	
 	<bean id="org.hisp.dhis.ivb.report.action.GenerateAlertsAction"

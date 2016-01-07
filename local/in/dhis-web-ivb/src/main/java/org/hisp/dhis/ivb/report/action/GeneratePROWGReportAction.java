@@ -27,6 +27,8 @@ import org.hisp.dhis.dataelement.DataElementCategoryOptionCombo;
 import org.hisp.dhis.dataelement.DataElementCategoryService;
 import org.hisp.dhis.dataelement.DataElementGroup;
 import org.hisp.dhis.dataelement.DataElementService;
+import org.hisp.dhis.dataset.DataSet;
+import org.hisp.dhis.dataset.DataSetService;
 import org.hisp.dhis.dataset.Section;
 import org.hisp.dhis.dataset.SectionService;
 import org.hisp.dhis.datavalue.DataValue;
@@ -161,11 +163,14 @@ public class GeneratePROWGReportAction implements Action
     @Autowired
     private SectionService dataSetSectionService;
     
+    @Autowired
+    private DataSetService dataSetService;
+    
     // -------------------------------------------------------------------------
     // Getters / Setters
     // -------------------------------------------------------------------------
 
- private String isoCode;
+    private String isoCode;
     
     private String whoRegion;
     
@@ -461,10 +466,54 @@ public class GeneratePROWGReportAction implements Action
     
     Set<Integer> percentageRequiredDe = new HashSet<Integer>();
 	
-	public Set<Integer> getPercentageRequiredDe() {
+	public Set<Integer> getPercentageRequiredDe() 
+	{
 		return percentageRequiredDe;
 	}
-    // --------------------------------------------------------------------------
+    
+	
+    private List<OrganisationUnit> gaviApplicationsOrgUnitList = new ArrayList<OrganisationUnit>();
+
+    public List<OrganisationUnit> getGaviApplicationsOrgUnitList()
+    {
+        return gaviApplicationsOrgUnitList;
+    }
+    private DataElementGroup gaviAppYearMonthDEGroup;
+
+    public DataElementGroup getGaviAppYearMonthDEGroup()
+    {
+        return gaviAppYearMonthDEGroup;
+    }
+
+    private DataElementGroup gaviAppStatus;
+
+    public DataElementGroup getGaviAppStatus()
+    {
+        return gaviAppStatus;
+    }
+
+    private DataElementGroup gaviIntroSupportStatus;
+
+    public DataElementGroup getGaviIntroSupportStatus()
+    {
+        return gaviIntroSupportStatus;
+    }
+
+    private List<Section> gaviDataSetSections;
+    
+	public List<Section> getGaviDataSetSections() 
+	{
+		return gaviDataSetSections;
+	}
+
+	private Map<OrganisationUnit, Map<String, Map<Integer, String>>> gaviOrgUnitResultMap;
+
+    public Map<OrganisationUnit, Map<String, Map<Integer, String>>> getGaviOrgUnitResultMap()
+    {
+        return gaviOrgUnitResultMap;
+    }
+    
+	// --------------------------------------------------------------------------
     // Action implementation
     // --------------------------------------------------------------------------
     public String execute()
@@ -539,6 +588,7 @@ public class GeneratePROWGReportAction implements Action
 
         Lookup lookup = lookupService.getLookupByName( "UNICEF_REGIONS_GROUPSET" );
         
+        
         unicefRegionsGroupSet = organisationUnitGroupService.getOrganisationUnitGroupSet( Integer.parseInt( lookup.getValue() ) );
         
         if ( orgUnitIds.size() > 1 )
@@ -549,12 +599,14 @@ public class GeneratePROWGReportAction implements Action
                 if( orgUnit.getHierarchyLevel()== 3 )
                 {
                     orgUnitList.add( orgUnit );
+                    gaviApplicationsOrgUnitList.add( orgUnit );
                 }
             }
         }
         else if ( selectionTreeManager.getReloadedSelectedOrganisationUnits() != null )
         {
             orgUnitList = new ArrayList<OrganisationUnit>( selectionTreeManager.getReloadedSelectedOrganisationUnits() );
+            gaviApplicationsOrgUnitList = new ArrayList<OrganisationUnit>( selectionTreeManager.getReloadedSelectedOrganisationUnits() );
             List<OrganisationUnit> lastLevelOrgUnit = new ArrayList<OrganisationUnit>();
             List<OrganisationUnit> userOrgUnits = new ArrayList<OrganisationUnit>( currentUserService.getCurrentUser().getDataViewOrganisationUnits() );
             for ( OrganisationUnit orgUnit : userOrgUnits )
@@ -569,12 +621,225 @@ public class GeneratePROWGReportAction implements Action
                 }
             }
             orgUnitList.retainAll( lastLevelOrgUnit );
+            gaviApplicationsOrgUnitList.retainAll( lastLevelOrgUnit );
+        }
+        
+        Date sDate = getStartDateByString( introStartDate );
+        Date eDate = getEndDateByString( introEndDate );
+        
+        /*
+         * Need to change group ids to constants
+         */
+        gaviAppYearMonthDEGroup = dataElementService.getDataElementGroup( 38 );
+        gaviAppStatus = dataElementService.getDataElementGroup( 37 );
+        gaviIntroSupportStatus = dataElementService.getDataElementGroup( 39 );
+
+        Set<DataElementGroup> gaviDataElementGroups = new HashSet<DataElementGroup>();
+        gaviDataElementGroups.add( gaviAppStatus );
+        gaviDataElementGroups.add( gaviIntroSupportStatus );
+
+        List<DataElement> gaviAppYearDEs = new ArrayList<DataElement>( gaviAppYearMonthDEGroup.getMembers() ); 
+
+        gaviDataSetSections = new ArrayList<Section>();
+        List<String> sectionNames = new ArrayList<String>();
+        /*
+        DataSet dataSet = dataSetService.getDataSet( 4 );
+        gaviDataSetSections.addAll( dataSet.getSections() );
+        for ( Section section : gaviDataSetSections )
+        {
+            sectionNames.add( section.getName().trim() );
+        }
+        */
+        gaviDataSetSections.add( dataSetSectionService.getSection( 32 ) );
+        gaviDataSetSections.add( dataSetSectionService.getSection( 33 ) );
+        for ( Section section : gaviDataSetSections )
+        {
+            sectionNames.add( section.getName().trim() );
+        }
+
+        Set<DataElement> allDes = new HashSet<DataElement>();
+        allDes.addAll( gaviAppYearMonthDEGroup.getMembers() );
+        allDes.addAll( gaviAppStatus.getMembers() );
+        
+        Collections.sort( gaviApplicationsOrgUnitList, new IdentifiableObjectNameComparator() );
+        Collection<Integer> organisationUnitIds1 = new ArrayList<Integer>( getIdentifiers( gaviApplicationsOrgUnitList ) );
+        String orgUnitIdsByComma1 = "-1";
+        if ( organisationUnitIds1.size() > 0 )
+        {
+            orgUnitIdsByComma1 = getCommaDelimitedString( organisationUnitIds1 );
+        }
+        Collection<Integer> dataElementIds1 = new ArrayList<Integer>( getIdentifiers( allDes ) );
+        String dataElementIdsByComma1 = "-1";
+        if ( dataElementIds1.size() > 0 )
+        {
+            dataElementIdsByComma1 = getCommaDelimitedString( dataElementIds1 );
+        }
+        Map<String, DataValue> dataValueMap = new HashMap<String, DataValue>();
+        dataValueMap = ivbUtil.getLatestDataValuesForTabularReport( dataElementIdsByComma1, orgUnitIdsByComma1 );
+
+        //-------------------------------------------------------------------------------------------------
+        // Filter3: Getting orgunit list whose intro year is between the
+        // selected start year and end year
+        Set<OrganisationUnit> orgUnitsOutOfgaviAppYear = new HashSet<OrganisationUnit>();
+        gaviOrgUnitResultMap = new HashMap<OrganisationUnit, Map<String, Map<Integer, String>>>();
+        Iterator<OrganisationUnit> orgUnitIterator = gaviApplicationsOrgUnitList.iterator();
+        while ( orgUnitIterator.hasNext() )
+        {
+            OrganisationUnit orgUnit = orgUnitIterator.next();
+            //System.out.println( "**********  " + orgUnit.getName() );
+            Map<String, Map<Integer, String>> sectionResultMap = gaviOrgUnitResultMap.get( orgUnit );
+            if ( sectionResultMap == null || sectionResultMap.size() <= 0 )
+            {
+                sectionResultMap = new HashMap<String, Map<Integer, String>>();
+            }
+
+            int flag = 0;
+            for ( DataElement dataElement : gaviAppYearDEs )
+            {
+                //System.out.print( dataElement.getName() + " ");
+                Set<AttributeValue> dataElementAttributeValues = dataElement.getAttributeValues();
+                if ( dataElementAttributeValues != null && dataElementAttributeValues.size() > 0 )
+                {
+                    for ( AttributeValue deAttributeValue : dataElementAttributeValues )
+                    {
+                        //System.out.println( deAttributeValue.getValue() + " " );
+                        if ( deAttributeValue.getAttribute().getId() == vaccineAttributeConstant.getValue()
+                            && deAttributeValue.getValue() != null
+                            && sectionNames.contains( deAttributeValue.getValue().trim() ) )
+                        {
+                            //System.out.println( "Inside if " );
+                            //DataValue dv = dataValueService.getLatestDataValue( dataElement, optionCombo, orgUnit );
+                            DataValue dv = dataValueMap.get( orgUnit.getId()+":"+dataElement.getId() );
+                            if ( dv != null && dv.getValue() != null )
+                            {
+                                String value = dv.getValue();
+                                Map<Integer, String> valueResultMap = sectionResultMap.get( deAttributeValue.getValue().trim() );
+                                if ( valueResultMap == null || valueResultMap.size() <= 0 )
+                                {
+                                    valueResultMap = new HashMap<Integer, String>();
+                                }
+                                Date valueDate = getStartDateByString( value );
+
+                                if ( valueDate != null && sDate.getTime() <= valueDate.getTime()
+                                    && valueDate.getTime() <= eDate.getTime() )
+                                {
+                                    valueResultMap.put( gaviAppYearMonthDEGroup.getId(), value );
+                                    sectionResultMap.put( deAttributeValue.getValue().trim(), valueResultMap );
+                                    gaviOrgUnitResultMap.put( orgUnit, sectionResultMap );
+                                    if ( valueDate.equals( sDate ) || valueDate.equals( eDate )
+                                        || (valueDate.after( sDate ) && valueDate.before( eDate )) )
+                                    {
+                                        flag = 1;
+                                        //System.out.print("Flag is 1 for : ");
+                                    }                                    
+                                }
+                                //System.out.println( orgUnit.getName() + " : " + dataElement.getName() + " : " + valueDate + " : " + sDate + " : " + eDate );
+                            }
+                            else
+                            {
+                                Map<Integer, String> valueResultMap = sectionResultMap.get( deAttributeValue.getValue()
+                                    .trim() );
+                                if ( valueResultMap == null || valueResultMap.size() <= 0 )
+                                {
+                                    valueResultMap = new HashMap<Integer, String>();
+                                }
+                                valueResultMap.put( gaviAppYearMonthDEGroup.getId(), " " );
+                                sectionResultMap.put( deAttributeValue.getValue().trim(), valueResultMap );
+                                gaviOrgUnitResultMap.put( orgUnit, sectionResultMap );
+                            }
+
+                        }
+                    }
+                }
+            }
+            if ( flag != 0 )
+            {
+                for ( DataElementGroup dataElementGroup : gaviDataElementGroups )
+                {
+                    List<DataElement> dataElements = new ArrayList<DataElement>( dataElementGroup.getMembers() );
+                    for ( DataElement dataElement : dataElements )
+                    {
+                        Set<AttributeValue> dataElementAttributeValues = dataElement.getAttributeValues();
+                        if ( dataElementAttributeValues != null && dataElementAttributeValues.size() > 0 )
+                        {
+                            for ( AttributeValue deAttributeValue : dataElementAttributeValues )
+                            {
+                                if ( deAttributeValue.getAttribute().getId() == vaccineAttributeConstant.getValue()
+                                    && deAttributeValue.getValue() != null
+                                    && sectionNames.contains( deAttributeValue.getValue().trim() ) )
+                                {
+                                    //DataValue dv = dataValueService.getLatestDataValue( dataElement, optionCombo, orgUnit );
+                                    DataValue dv = dataValueMap.get( orgUnit.getId()+":"+dataElement.getId() );
+
+                                    if ( dv != null && dv.getValue() != null )
+                                    {
+                                        String value = dv.getValue();
+                                        String comment = dv.getComment();
+                                        Map<Integer, String> valueResultMap = sectionResultMap.get( deAttributeValue
+                                            .getValue().trim() );
+                                        if ( valueResultMap == null || valueResultMap.size() <= 0 )
+                                        {
+                                            valueResultMap = new HashMap<Integer, String>();
+                                        }
+                                        valueResultMap.put( dataElementGroup.getId(), value + ":" + comment );
+                                        sectionResultMap.put( deAttributeValue.getValue().trim(), valueResultMap );
+                                        gaviOrgUnitResultMap.put( orgUnit, sectionResultMap );
+                                    }
+                                    else
+                                    {
+                                        Map<Integer, String> valueResultMap = sectionResultMap.get( deAttributeValue
+                                            .getValue().trim() );
+                                        if ( valueResultMap == null || valueResultMap.size() <= 0 )
+                                        {
+                                            valueResultMap = new HashMap<Integer, String>();
+                                        }
+                                        valueResultMap.put( dataElementGroup.getId(), " " );
+                                        sectionResultMap.put( deAttributeValue.getValue().trim(), valueResultMap );
+                                        gaviOrgUnitResultMap.put( orgUnit, sectionResultMap );
+                                    }
+
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            else
+            {
+                orgUnitIterator.remove();
+                //System.out.println(  orgUnit.getName() + " is removed as intro year not fall in" );
+            }
+        }
+
+        for ( OrganisationUnit orgUnit : gaviApplicationsOrgUnitList )
+        {
+            Map<String, Map<Integer, String>> sectionResultMap = gaviOrgUnitResultMap.get( orgUnit );
+            for ( Section dataSetSection : dataSetSections )
+            {
+                Map<Integer, String> valueResultMap = sectionResultMap.get( dataSetSection.getName().trim() );
+                if ( valueResultMap != null )
+                {
+                }
+                else
+                {
+                    valueResultMap = new HashMap<Integer, String>();
+                    valueResultMap.put( gaviAppYearMonthDEGroup.getId(), " " );
+                }
+                sectionResultMap.put( dataSetSection.getName().trim(), valueResultMap );
+            }
+
+            gaviOrgUnitResultMap.put( orgUnit, sectionResultMap );
+
         }
         
         
+        
+        //-------------------------------------------------------------------------------------------------
+        //-------------------------------------------------------------------------------------------------
+        
+        
         // Filtering countries by vaccine introduction date
-        Date sDate = getStartDateByString( introStartDate );
-        Date eDate = getEndDateByString( introEndDate );
+        
         
         Constant introYearGroupConstant = constantService.getConstantByName( IVBUtil.PROWG_INTRO_YEAR_DE_GROUP );
         DataElementGroup introYearDEGroup = dataElementService.getDataElementGroup( (int) introYearGroupConstant.getValue() );
@@ -583,7 +848,7 @@ public class GeneratePROWGReportAction implements Action
         DataElementCategoryOptionCombo optionCombo = categoryService.getDefaultDataElementCategoryOptionCombo();
 
         Map<String, Set<OrganisationUnit>> vaccine_IntroDate_OrgunitMap = new TreeMap<String, Set<OrganisationUnit>>();
-        Iterator<OrganisationUnit> orgUnitIterator = orgUnitList.iterator();        
+        orgUnitIterator = orgUnitList.iterator();        
         while( orgUnitIterator.hasNext() )
         {
             OrganisationUnit orgUnit = orgUnitIterator.next();
