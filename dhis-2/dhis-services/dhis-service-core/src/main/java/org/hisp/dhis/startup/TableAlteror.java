@@ -277,7 +277,7 @@ public class TableAlteror
 
         executeSql( "ALTER TABLE minmaxdataelement RENAME minvalue TO minimumvalue" );
         executeSql( "ALTER TABLE minmaxdataelement RENAME maxvalue TO maximumvalue" );
-        
+
         executeSql( "update minmaxdataelement set generatedvalue = generated where generatedvalue is null" );
         executeSql( "alter table minmaxdataelement drop column generated" );
         executeSql( "alter table minmaxdataelement alter column generatedvalue set not null" );
@@ -767,11 +767,11 @@ public class TableAlteror
 
         //update programruleaction:
         executeSql( "ALTER TABLE programruleaction DROP COLUMN name" );
-        
+
         //update programrule
         executeSql( "UPDATE programrule SET rulecondition = condition WHERE rulecondition IS NULL" );
         executeSql( "ALTER TABLE programrule DROP COLUMN condition" );
-        
+
         // data approval
         executeSql( "UPDATE dataapproval SET accepted=false WHERE accepted IS NULL" );
         executeSql( "ALTER TABLE dataapproval ALTER COLUMN accepted SET NOT NULL" );
@@ -894,6 +894,9 @@ public class TableAlteror
         organisationUnitService.updatePaths();
         
         categoryOptionComboStore.updateNames();
+
+        executeSql( "alter table trackedentitydatavalue alter column storedby TYPE character varying(255)" );
+        executeSql( "alter table datavalue alter column storedby TYPE character varying(255)" );
 
         log.info( "Tables updated" );
     }
