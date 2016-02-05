@@ -902,7 +902,7 @@ function hideLoader()
  */
 function removeItem( itemId, itemName, confirmation, action, success )
 {                
-    var result = window.confirm( confirmation + "\n\n" + itemName );
+    var result = window.confirm( confirmation + " \"" + itemName + "\"");
     
     if ( result )
     {
