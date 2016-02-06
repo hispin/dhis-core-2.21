@@ -391,10 +391,8 @@
 		class="org.hisp.dhis.ivb.report.action.GetCountryFileReportFormAction">
 		<result name="success" type="velocity">/dhis-web-ivb/main.vm</result>
 		<param name="page">/dhis-web-ivb/countryFileReportForm.vm</param>
-		<param name="javascripts">
-			../dhis-web-commons/oust/oust.js,javascript/ivb_report.js,javascript/jquerycssmenu.js,javascript/request.js,javascript/jquery.treeview.js</param>
-		<param name="stylesheets">
-			css/ivb-dataentry.css,css/jquerycssmenu.css,css/jquery.treeview.css</param>		
+		<param name="javascripts">../dhis-web-commons/oust/oust.js,javascript/ivb_report.js,javascript/jquerycssmenu.js,javascript/request.js,javascript/jquery.treeview.js</param>
+		<param name="stylesheets">css/ivb-dataentry.css,css/jquerycssmenu.css,css/jquery.treeview.css</param>		
 	</action>
 	<action name="generateHTMLReport"
 		class="org.hisp.dhis.ivb.report.action.GenerateHTMLReportAction">

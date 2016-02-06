@@ -45,7 +45,7 @@
 	    
 	    selectionTreeSelection.setListenerFunction( treeSelected );	
 		selectionTreeSelection.setMultipleSelectionAllowed( false );
-		selectionTree.clearSelectedOrganisationUnits();
+		//selectionTree.clearSelectedOrganisationUnits();
 		selectionTree.buildSelectionTree();
 	});
 </script>
@@ -61,9 +61,12 @@
  			<tr>
  				<td width="40%">
  					$i18n.getString( "select_country" )<br/>
+ 					<div id="selectionTree" class="ui-widget-content ui-corner-all" style="height: 166px; width: 375px; overflow:auto;"></div>
+ 					<!--
  					<div id="orgUnitTreeContainer" class="ui-widget-content ui-corner-all" style="height: 166px; width: 375px; overflow:auto;">
  						<div id="selectionTree" ></div>
  					</div>
+ 					-->
 				 </td>
 				 
 				 <td>&nbsp;</td>

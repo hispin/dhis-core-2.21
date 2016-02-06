@@ -419,11 +419,9 @@
                         </td>
                         <td style="width:28%">$dataElement.displayName</td>
 
-
-
-                        #if($dataElement.type == 'int')
+                        #if($dataElement.valueType == 'NUMBER')
                             <td style="width:18%" >
-                                <input type="text" style="width:130px;" #if( $deUpdateStatus == "no" ) disabled #end name="${dataEntryId}" id="${dataEntryId}" value="$!dataValue.get(${getter})"  onblur="javascript:saveValue('$!dataValue.get(${getter})', '$!dataComments.get(${getter})', '$dataElement.id','$organisationUnit.id','$optionCombo.id','$count','$dataEntryId','$dataElement.type')" />
+                                <input type="text" style="width:130px;" #if( $deUpdateStatus == "no" ) disabled #end name="${dataEntryId}" id="${dataEntryId}" value="$!dataValue.get(${getter})"  onblur="javascript:saveValue('$!dataValue.get(${getter})', '$!dataComments.get(${getter})', '$dataElement.id','$organisationUnit.id','$optionCombo.id','$count','$dataEntryId','$dataElement.valueType')" />
                                 <script>
                                     function formatNumber()
                                     {
@@ -445,17 +443,17 @@
                                 </script>
                             </td>
 
-                        #elseif($dataElement.type == 'bool')
+                        #elseif($dataElement.valueType == 'BOOLEAN')
                             <td style="width:18%">
-                                <select style="width:134px;" #if( $deUpdateStatus == "no" ) disabled #end name="${dataEntryId}" id="${dataEntryId}"  onchange="javascript:saveValue('$!dataValue.get(${getter})', '$!dataComments.get(${getter})', '$dataElement.id','$organisationUnit.id','$optionCombo.id','$count','$dataEntryId','$dataElement.type')" />
+                                <select style="width:134px;" #if( $deUpdateStatus == "no" ) disabled #end name="${dataEntryId}" id="${dataEntryId}"  onchange="javascript:saveValue('$!dataValue.get(${getter})', '$!dataComments.get(${getter})', '$dataElement.id','$organisationUnit.id','$optionCombo.id','$count','$dataEntryId','$dataElement.valueType')" />
                                 <option value="-1">$i18n.getString( "please_select" )</option>
                                 <option #if($!dataValue.get(${getter}).toLowerCase() == 'yes' ) selected #end>Yes</option>
                                 <option #if($!dataValue.get(${getter}).toLowerCase() == 'no' ) selected #end>No</option>
                                 </select>
                             </td>
-                        #elseif($dataElement.type == 'date')
-                            <td style="width:18%"><input type="text" id="${dataEntryId}" name="${dataEntryId}" style="width:130px;" #if( $deUpdateStatus == "no" ) disabled #end  value="$!dataValue.get(${getter})"  onblur="javascript:saveValue('$!dataValue.get(${getter})','$!dataComments.get(${getter})', '$dataElement.id','$organisationUnit.id','$optionCombo.id','$count','$dataEntryId','$dataElement.type')" title="Date Format: YYYY / YYYY-Qn / YYYY-MM / YYYY-MM-DD e.g. 2012 / 2012-Q1 / 2012-01 / 2012-01-01 / NA" /></td>
-                        #elseif($dataElement.type == 'string')
+                        #elseif($dataElement.valueType == 'DATE')
+                            <td style="width:18%"><input type="text" id="${dataEntryId}" name="${dataEntryId}" style="width:130px;" #if( $deUpdateStatus == "no" ) disabled #end  value="$!dataValue.get(${getter})"  onblur="javascript:saveValue('$!dataValue.get(${getter})','$!dataComments.get(${getter})', '$dataElement.id','$organisationUnit.id','$optionCombo.id','$count','$dataEntryId','$dataElement.valueType')" title="Date Format: YYYY / YYYY-Qn / YYYY-MM / YYYY-MM-DD e.g. 2012 / 2012-Q1 / 2012-01 / 2012-01-01 / NA" /></td>
+                        #elseif($dataElement.valueType == 'TEXT')
                             #if( $dataElement.getOptionSet() )
                                 <td style="width:18%">
                                     <select style="width:134px;" #if( $deUpdateStatus == "no" ) disabled #end name="${dataEntryId}" id="${dataEntryId}" onchange="javascript:saveValueOption('$!dataComments.get(${getter})','$dataElement.id','$organisationUnit.id','$optionCombo.id','$count','${dataEntryId}')">
@@ -466,10 +464,10 @@
                                     </select>
                                 </td>
                             #elseif(!($dataElement.getOptionSet()))
-                                <td style="width:18%"><input type="text" style="width:130px;" #if( $deUpdateStatus == "no" ) disabled #end name="${dataEntryId}" id="${dataEntryId}" value="$!dataValue.get(${getter})"  onblur="javascript: saveValue('$!dataValue.get(${getter})','$!dataComments.get(${getter})', '$dataElement.id','$organisationUnit.id','$optionCombo.id','$count','$dataEntryId','$dataElement.type')" /></td>
+                                <td style="width:18%"><input type="text" style="width:130px;" #if( $deUpdateStatus == "no" ) disabled #end name="${dataEntryId}" id="${dataEntryId}" value="$!dataValue.get(${getter})"  onblur="javascript: saveValue('$!dataValue.get(${getter})','$!dataComments.get(${getter})', '$dataElement.id','$organisationUnit.id','$optionCombo.id','$count','$dataEntryId','$dataElement.valueType')" /></td>
                             #end
                         #else
-                            <td style="width:18%"><input type="text" style="width:130px;" #if( $deUpdateStatus == "no" ) disabled #end name="${dataEntryId}" id="${dataEntryId}" value="$!dataValue.get(${getter})"  onblur="javascript: saveValue('$!dataValue.get(${getter})','$!dataComments.get(${getter})', '$dataElement.id','$organisationUnit.id','$optionCombo.id','$count','$dataEntryId','$dataElement.type')"  /></td>
+                            <td style="width:18%"><input type="text" style="width:130px;" #if( $deUpdateStatus == "no" ) disabled #end name="${dataEntryId}" id="${dataEntryId}" value="$!dataValue.get(${getter})"  onblur="javascript: saveValue('$!dataValue.get(${getter})','$!dataComments.get(${getter})', '$dataElement.id','$organisationUnit.id','$optionCombo.id','$count','$dataEntryId','$dataElement.valueType')"  /></td>
                         #end
 
                         <td style="width:23%">
@@ -480,7 +478,7 @@
                         #if((!$dataValue.get(${getter}) && !$dataComments.get(${getter}) ) || $deUpdateStatus == "no" || $copyRightMap.get(${getter})=='No')
                             <td align="center" style="width:5%"><img src="images/disable_copy.png" width="25" title="Resubmit current value and comment"/></td>
                         #else
-                            #if($dataElement.type == 'string' && $dataElement.getOptionSet())
+                            #if($dataElement.valueType == 'string' && $dataElement.getOptionSet())
                                 <td align="center" style="width:5%"><a href="javascript:copyValueAndCommentOption('$dataElement.id','$organisationUnit.id','$optionCombo.id','$count','$dataEntryId','$dataEntryComment')"><img src="images/copy.png" width="25" title="Resubmit current value and comment"/></a></td>
                             #else
                                 <td align="center" style="width:5%"><a href="javascript:copyValueAndComment('$dataElement.id','$organisationUnit.id','$optionCombo.id','$count','$dataEntryId','$dataEntryComment')"><img src="images/copy.png" width="25" /></a></td>

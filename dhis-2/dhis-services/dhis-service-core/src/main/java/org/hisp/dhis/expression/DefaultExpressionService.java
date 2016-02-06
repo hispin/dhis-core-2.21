@@ -51,6 +51,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hisp.dhis.common.GenericStore;
+import org.hisp.dhis.common.IdentifiableObjectManager;
 import org.hisp.dhis.common.ListMap;
 import org.hisp.dhis.common.exception.InvalidIdentifierReferenceException;
 import org.hisp.dhis.constant.Constant;
@@ -67,6 +68,7 @@ import org.hisp.dhis.organisationunit.OrganisationUnitGroupService;
 import org.hisp.dhis.period.Period;
 import org.hisp.dhis.system.util.DateUtils;
 import org.hisp.dhis.system.util.MathUtils;
+import org.hisp.dhis.commons.collection.CachingMap;
 import org.hisp.dhis.commons.util.TextUtils;
 import org.hisp.dhis.validation.ValidationRule;
 import org.springframework.transaction.annotation.Transactional;
@@ -121,6 +123,13 @@ public class DefaultExpressionService
     public void setOrganisationUnitGroupService( OrganisationUnitGroupService organisationUnitGroupService )
     {
         this.organisationUnitGroupService = organisationUnitGroupService;
+    }
+    
+    private IdentifiableObjectManager idObjectManager;
+
+    public void setIdObjectManager( IdentifiableObjectManager idObjectManager )
+    {
+        this.idObjectManager = idObjectManager;
     }
 
     // -------------------------------------------------------------------------
@@ -224,8 +233,6 @@ public class DefaultExpressionService
             orgUnitCountMap, days, expression.getMissingValueStrategy(), incompleteValues );
 
         Double result = expressionString != null ? calculateExpression( expressionString ) : null;
-        
-        log.debug( "Expression: " + expression.getExplodedExpressionFallback() + ", generated: " + expressionString + ", result: " + result );
         
         return result;
     }
@@ -520,7 +527,7 @@ public class DefaultExpressionService
         {
             String constant = matcher.group( 1 );
             
-            if ( constantService.getConstant( constant ) == null )
+            if ( idObjectManager.getNoAcl( Constant.class, constant ) == null )
             {
                 return CONSTANT_DOES_NOT_EXIST;
             }
@@ -541,7 +548,7 @@ public class DefaultExpressionService
         {
             String group = matcher.group( 1 );
             
-            if ( organisationUnitGroupService.getOrganisationUnitGroup( group ) == null )
+            if ( idObjectManager.getNoAcl( OrganisationUnitGroup.class, group ) == null )
             {
                 return OU_GROUP_DOES_NOT_EXIST;
             }
@@ -673,20 +680,6 @@ public class DefaultExpressionService
 
     @Override
     @Transactional
-    public void substituteExpressions( Collection<Indicator> indicators, Integer days )
-    {
-        if ( indicators != null && !indicators.isEmpty() )
-        {
-            for ( Indicator indicator : indicators )
-            {
-                indicator.setExplodedNumerator( substituteExpression( indicator.getNumerator(), days ) );
-                indicator.setExplodedDenominator( substituteExpression( indicator.getDenominator(), days ) );
-            }
-        }                
-    }
-    
-    @Override
-    @Transactional
     public void explodeValidationRuleExpressions( Collection<ValidationRule> validationRules )
     {
         if ( validationRules != null && !validationRules.isEmpty() )
@@ -767,7 +760,7 @@ public class DefaultExpressionService
             {
                 final StringBuilder replace = new StringBuilder( PAR_OPEN );
 
-                final DataElement dataElement = dataElementService.getDataElement( matcher.group( 1 ) );
+                final DataElement dataElement = idObjectManager.getNoAcl( DataElement.class, matcher.group( 1 ) );
 
                 final DataElementCategoryCombo categoryCombo = dataElement.getCategoryCombo();
 
@@ -787,7 +780,25 @@ public class DefaultExpressionService
 
     @Override
     @Transactional
-    public String substituteExpression( String expression, Integer days )
+    public void substituteExpressions( Collection<Indicator> indicators, Integer days )
+    {
+        if ( indicators != null && !indicators.isEmpty() )
+        {
+            Map<String, Constant> constants = new CachingMap<String, Constant>().
+                load( idObjectManager.getAllNoAcl( Constant.class ), c -> c.getUid() );
+            
+            Map<String, OrganisationUnitGroup> orgUnitGroups = new CachingMap<String, OrganisationUnitGroup>().
+                load( idObjectManager.getAllNoAcl( OrganisationUnitGroup.class ), g -> g.getUid() );
+            
+            for ( Indicator indicator : indicators )
+            {
+                indicator.setExplodedNumerator( substituteExpression( indicator.getNumerator(), constants, orgUnitGroups, days ) );
+                indicator.setExplodedDenominator( substituteExpression( indicator.getDenominator(), constants, orgUnitGroups, days ) );
+            }
+        }                
+    }
+    
+    private String substituteExpression( String expression, Map<String, Constant> constants, Map<String, OrganisationUnitGroup> orgUnitGroups, Integer days )
     {
         if ( expression == null || expression.isEmpty() )
         {
@@ -805,7 +816,7 @@ public class DefaultExpressionService
         {
             String co = matcher.group( 1 );
             
-            Constant constant = constantService.getConstant( co );
+            Constant constant = constants.get( co );
             
             String replacement = constant != null ? String.valueOf( constant.getValue() ) : NULL_REPLACEMENT; 
             
@@ -825,7 +836,7 @@ public class DefaultExpressionService
         {
             String oug = matcher.group( 1 );
             
-            OrganisationUnitGroup group = organisationUnitGroupService.getOrganisationUnitGroup( oug );
+            OrganisationUnitGroup group = orgUnitGroups.get( oug );
             
             String replacement = group != null ? String.valueOf( group.getMembers().size() ) : NULL_REPLACEMENT;
 

@@ -674,7 +674,7 @@ public class GeneratePROWGReportAction implements Action
         {
             dataElementIdsByComma1 = getCommaDelimitedString( dataElementIds1 );
         }
-        Map<String, DataValue> dataValueMap = new HashMap<String, DataValue>();
+        //Map<String, DataValue> dataValueMap = new HashMap<String, DataValue>();
         dataValueMap = ivbUtil.getLatestDataValuesForTabularReport( dataElementIdsByComma1, orgUnitIdsByComma1 );
 
         //-------------------------------------------------------------------------------------------------

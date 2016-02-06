@@ -611,8 +611,8 @@
 								<td >$!dataSetMap.get($dataElement.uid)</td>
 								<td >$orgUnit.getName()</td>
 								<td >$dataElement.displayName</td>
-								#if($dataElement.type == 'int')
-									<td><input type="text" style="width:150px;" name="entryfield" id="${dataEntryId}" value="$!dataValue.get(${getter})"  #if( $deUpdateStatus == "no" ) disabled #end onblur="javascript: saveRegionValue('$!comment','$!dataValue.get(${getter})','$dataElement.id','$orgUnit.id','$dataElementCategoryOptionCombo.id','$count','$dataEntryId','$dataElement.type')" /></td>									
+								#if($dataElement.valueType == 'NUMBER')
+									<td><input type="text" style="width:150px;" name="entryfield" id="${dataEntryId}" value="$!dataValue.get(${getter})"  #if( $deUpdateStatus == "no" ) disabled #end onblur="javascript: saveRegionValue('$!comment','$!dataValue.get(${getter})','$dataElement.id','$orgUnit.id','$dataElementCategoryOptionCombo.id','$count','$dataEntryId','$dataElement.valueType')" /></td>									
 									<script>
 										function formatNumber()
 										{
@@ -633,22 +633,22 @@
 										formatNumber();
 									</script>
 
-									<td><textarea cols="32" onclick="textAreaAdjust(this)" style="overflow:hidden;height:20px;width:100%;" name="entrycomment" id="${dataEntryComment}" value="$!comment"  onblur="javascript: saveComment('$dataValue.get(${getter})','$!comment','$dataElement.id','$orgUnit.id','$dataElementCategoryOptionCombo.id','$count','$dataEntryId','$dataEntryComment','$dataElement.type')" ondblclick="javascript:setCommentBoxSize('${dataEntryComment}')">$!dataComments.get(${getter})</textarea></td>
-								#elseif($dataElement.type == 'bool')
+									<td><textarea cols="32" onclick="textAreaAdjust(this)" style="overflow:hidden;height:20px;width:100%;" name="entrycomment" id="${dataEntryComment}" value="$!comment"  onblur="javascript: saveComment('$dataValue.get(${getter})','$!comment','$dataElement.id','$orgUnit.id','$dataElementCategoryOptionCombo.id','$count','$dataEntryId','$dataEntryComment','$dataElement.valueType')" ondblclick="javascript:setCommentBoxSize('${dataEntryComment}')">$!dataComments.get(${getter})</textarea></td>
+								#elseif($dataElement.valueType == 'BOOLEAN')
 									<td>
-										<select style="width:150px;" name="entryfield" id="${dataEntryId}"  #if( $deUpdateStatus == "no" ) disabled #end onchange="javascript: saveRegionValue('$!comment','$!dataValue.get(${getter})','$dataElement.id','$orgUnit.id','$dataElementCategoryOptionCombo.id','$count','$dataEntryId','$dataElement.type')" />
+										<select style="width:150px;" name="entryfield" id="${dataEntryId}"  #if( $deUpdateStatus == "no" ) disabled #end onchange="javascript: saveRegionValue('$!comment','$!dataValue.get(${getter})','$dataElement.id','$orgUnit.id','$dataElementCategoryOptionCombo.id','$count','$dataEntryId','$dataElement.valueType')" />
 										<option value="-1">$i18n.getString( "please_select" )</option>
 										<option #if($!dataValue.get(${getter}).toLowerCase() == 'yes' ) selected #end>Yes</option>
 										<option #if($!dataValue.get(${getter}).toLowerCase() == 'no' ) selected #end>No</option>
 										</select>
 									</td>
-									<td><textarea  cols="32" onclick="textAreaAdjust(this)" style="overflow:hidden;height:20px;width:100%;" name="entrycomment" id="${dataEntryComment}" value="$!comment"  onblur="javascript: saveComment('$dataValue.get(${getter})','$!comment','$dataElement.id','$orgUnits.id','$dataElementCategoryOptionCombo.id','$count','$dataEntryId','$dataEntryComment','$dataElement.type')">$!dataComments.get(${getter})</textarea></td>
-								#elseif($dataElement.type == 'date')
+									<td><textarea  cols="32" onclick="textAreaAdjust(this)" style="overflow:hidden;height:20px;width:100%;" name="entrycomment" id="${dataEntryComment}" value="$!comment"  onblur="javascript: saveComment('$dataValue.get(${getter})','$!comment','$dataElement.id','$orgUnits.id','$dataElementCategoryOptionCombo.id','$count','$dataEntryId','$dataEntryComment','$dataElement.valueType')">$!dataComments.get(${getter})</textarea></td>
+								#elseif($dataElement.valueType == 'DATE')
 
-										<td><input type="text" style="width:150px;" value="$!dataValue.get(${getter})" #if( $deUpdateStatus == "no" ) disabled #end onblur="javascript: saveRegionValue('$!comment','$!dataValue.get(${getter})','$dataElement.id','$orgUnit.id','$dataElementCategoryOptionCombo.id','$count','$dataEntryId','$dataElement.type')" name="entryfield" id="${dataEntryId}" title="Date Format: YYYY / YYYY-Qn / YYYY-MM / YYYY-MM-DD e.g. 2012 / 2012-Q1 / 2012-01 / 2012-01-01 / NA" /></td>
-										<td><textarea cols="32" onclick="textAreaAdjust(this)" style="overflow:hidden;height:20px;width:100%;" name="entrycomment" id="${dataEntryComment}" value="$!comment"  onblur="javascript: saveComment('$dataValue.get(${getter})','$!comment','$dataElement.id','$orgUnit.id','$dataElementCategoryOptionCombo.id','$count','$dataEntryId','$dataEntryComment','$dataElement.type')" ondblclick="javascript:setCommentBoxSize('${dataEntryComment}')">$!dataComments.get(${getter})</textarea></td>
+										<td><input type="text" style="width:150px;" value="$!dataValue.get(${getter})" #if( $deUpdateStatus == "no" ) disabled #end onblur="javascript: saveRegionValue('$!comment','$!dataValue.get(${getter})','$dataElement.id','$orgUnit.id','$dataElementCategoryOptionCombo.id','$count','$dataEntryId','$dataElement.valueType')" name="entryfield" id="${dataEntryId}" title="Date Format: YYYY / YYYY-Qn / YYYY-MM / YYYY-MM-DD e.g. 2012 / 2012-Q1 / 2012-01 / 2012-01-01 / NA" /></td>
+										<td><textarea cols="32" onclick="textAreaAdjust(this)" style="overflow:hidden;height:20px;width:100%;" name="entrycomment" id="${dataEntryComment}" value="$!comment"  onblur="javascript: saveComment('$dataValue.get(${getter})','$!comment','$dataElement.id','$orgUnit.id','$dataElementCategoryOptionCombo.id','$count','$dataEntryId','$dataEntryComment','$dataElement.valueType')" ondblclick="javascript:setCommentBoxSize('${dataEntryComment}')">$!dataComments.get(${getter})</textarea></td>
 
-									#elseif($dataElement.type == 'string')
+									#elseif($dataElement.valueType == 'TEXT')
 										#if( $dataElement.getOptionSet() )
 											<td>
 												<select style="width:150px;" name="entryfield" id="${dataEntryId}" #if( $deUpdateStatus == "no" ) disabled #end onchange="javascript: saveRegionValueOption('$!comment','$!dataValue.get(${getter})','$dataElement.id','$orgUnit.id','$dataElementCategoryOptionCombo.id','$count','${dataEntryId}')">
@@ -658,21 +658,21 @@
 													#end
 												</select>
 											</td>
-											<td><textarea cols="32" onclick="textAreaAdjust(this)" style="overflow:hidden;height:20px;width:100%;" name="entrycomment" id="${dataEntryComment}" value="$!comment"  onblur="javascript: saveCommentOption('$dataValue.get(${getter})','$!comment','$dataElement.id','$orgUnit.id','$dataElementCategoryOptionCombo.id','$count','$dataEntryId','$dataEntryComment','$dataElement.type')">$!dataComments.get(${getter})</textarea></td>
+											<td><textarea cols="32" onclick="textAreaAdjust(this)" style="overflow:hidden;height:20px;width:100%;" name="entrycomment" id="${dataEntryComment}" value="$!comment"  onblur="javascript: saveCommentOption('$dataValue.get(${getter})','$!comment','$dataElement.id','$orgUnit.id','$dataElementCategoryOptionCombo.id','$count','$dataEntryId','$dataEntryComment','$dataElement.valueType')">$!dataComments.get(${getter})</textarea></td>
 										#elseif(!($dataElement.getOptionSet()))
-											<td><input type="text" style="width:150px;" name="entryfield" id="${dataEntryId}" #if( $deUpdateStatus == "no" ) disabled #end value="$dataValue.get(${getter})"  onblur="javascript: saveRegionValue('$!comment','$!dataValue.get(${getter})','$dataElement.id','$orgUnit.id','$dataElementCategoryOptionCombo.id','$count','$dataEntryId','$dataElement.type')" /></td>
-											<td><textarea cols="32" onclick="textAreaAdjust(this)" style="overflow:hidden;height:20px;width:100%;" name="entrycomment" id="${dataEntryComment}" value="$!comment"  onblur="javascript: saveComment('$dataValue.get(${getter})','$!comment','$dataElement.id','$orgUnit.id','$dataElementCategoryOptionCombo.id','$count','$dataEntryId','$dataEntryComment','$dataElement.type')" ondblclick="javascript:setCommentBoxSize('${dataEntryComment}')">$!dataComments.get(${getter})</textarea></td>
+											<td><input type="text" style="width:150px;" name="entryfield" id="${dataEntryId}" #if( $deUpdateStatus == "no" ) disabled #end value="$dataValue.get(${getter})"  onblur="javascript: saveRegionValue('$!comment','$!dataValue.get(${getter})','$dataElement.id','$orgUnit.id','$dataElementCategoryOptionCombo.id','$count','$dataEntryId','$dataElement.valueType')" /></td>
+											<td><textarea cols="32" onclick="textAreaAdjust(this)" style="overflow:hidden;height:20px;width:100%;" name="entrycomment" id="${dataEntryComment}" value="$!comment"  onblur="javascript: saveComment('$dataValue.get(${getter})','$!comment','$dataElement.id','$orgUnit.id','$dataElementCategoryOptionCombo.id','$count','$dataEntryId','$dataEntryComment','$dataElement.valueType')" ondblclick="javascript:setCommentBoxSize('${dataEntryComment}')">$!dataComments.get(${getter})</textarea></td>
 										#end
 									#else
-										<td><input type="text" name="entryfield" id="${dataEntryId}" value="$!dataValue.get(${getter})" #if( $deUpdateStatus == "no" ) disabled #end onblur="javascript: saveRegionValue('$!comment','$!dataValue.get(${getter})','$dataElement.id','$orgUnit.id','$dataElementCategoryOptionCombo.id','$count','$dataEntryId','$dataElement.type')"  /></td>
-										<td><textarea cols="32" onclick="textAreaAdjust(this)" style="overflow:hidden;height:20px;width:100%;" name="entrycomment" id="${dataEntryComment}" value="$!comment"  onblur="javascript: saveComment('$dataValue.get(${getter})','$!comment','$dataElement.id','$orgUnit.id','$dataElementCategoryOptionCombo.id','$count','$dataEntryId','$dataEntryComment','$dataElement.type')" ondblclick="javascript:setCommentBoxSize('${dataEntryComment}')">$!dataComments.get(${getter})</textarea></td>
+										<td><input type="text" name="entryfield" id="${dataEntryId}" value="$!dataValue.get(${getter})" #if( $deUpdateStatus == "no" ) disabled #end onblur="javascript: saveRegionValue('$!comment','$!dataValue.get(${getter})','$dataElement.id','$orgUnit.id','$dataElementCategoryOptionCombo.id','$count','$dataEntryId','$dataElement.valueType')"  /></td>
+										<td><textarea cols="32" onclick="textAreaAdjust(this)" style="overflow:hidden;height:20px;width:100%;" name="entrycomment" id="${dataEntryComment}" value="$!comment"  onblur="javascript: saveComment('$dataValue.get(${getter})','$!comment','$dataElement.id','$orgUnit.id','$dataElementCategoryOptionCombo.id','$count','$dataEntryId','$dataEntryComment','$dataElement.valueType')" ondblclick="javascript:setCommentBoxSize('${dataEntryComment}')">$!dataComments.get(${getter})</textarea></td>
 									#end
 
 									<td align="center" id="currentUser_${dataEntryId}">$!dataStoredBy.get(${getter})</td>
 									#if($copyRightMap.get(${getter})=='No' || ( $!dataValue.get(${getter})=='' && $!comment =='' ) || $deUpdateStatus == 'no')
 										<td title="Resubmit current value and comment"><img src="images/disable_copy.png" width="25" /></td>
 									#else
-										#if($dataElement.type == 'string' && $dataElement.getOptionSet())
+										#if($dataElement.valueType == 'string' && $dataElement.getOptionSet())
 											<td ><a href="javascript:copyRegionValueAndCommentOption('$dataElement.id','$orgUnit.id','$dataElementCategoryOptionCombo.id','$count','$dataEntryId','$dataEntryComment','$userName')"><img src="images/copy.png" id="copy_${dataEntryId}" width="25" title="Resubmit current  value and comment" /></a></td>
 										#else
 											<td ><a href="javascript:copyRegionValueAndComment('$dataElement.id','$orgUnit.id','$dataElementCategoryOptionCombo.id','$count','$dataEntryId','$dataEntryComment','$userName')"><img src="images/copy.png" id="copy_${dataEntryId}" width="25" title="Resubmit current  value and comment" /></a></td>

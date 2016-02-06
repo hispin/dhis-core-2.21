@@ -1410,7 +1410,7 @@ public class DefaultAnalyticsService
             List<NameableObject> items = new ArrayList<>( dimension.getItems() );
 
             i18nService.internationalise( items );
-            
+
             for ( NameableObject object : items )
             {
                 if ( DimensionType.PERIOD.equals( dimension.getDimensionType() ) && !calendar.isIso8601() )

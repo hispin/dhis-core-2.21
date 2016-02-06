@@ -581,6 +581,9 @@ public class GenerateAgendaReportAction
 
         DataSet dataSet = dataSetService.getDataSet( 4 );
         dataSetSections.addAll( dataSet.getSections() );
+        
+        dataSetSections.addAll(  dataSetService.getDataSet( 10 ).getSections() );
+        
         for ( Section section : dataSetSections )
         {
             sectionNames.add( section.getName().trim() );

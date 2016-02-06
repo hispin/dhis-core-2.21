@@ -665,7 +665,11 @@ Ext.onReady( function() {
                                                                     });
                                                                 }
 
-                                                                layer.widget.infrastructuralDataElementValuesStore.loadData(records);
+                                                                var store = layer.widget.infrastructuralDataElementValuesStore;
+
+                                                                if (store) {
+                                                                    store.loadData(records);
+                                                                }
                                                             }
 														}
 													});
@@ -861,7 +865,7 @@ Ext.onReady( function() {
 
 		if (isEvent) {
 			defaultLeftClickSelect = function fn(feature) {
-                var ignoreKeys = ['label', 'value', 'nameColumnMap', 'psi', 'ps', 'longitude', 'latitude', 'eventdate', 'ou', 'oucode', 'ouname', 'popupText'],
+                var ignoreKeys = ['id', 'label', 'value', 'nameColumnMap', 'psi', 'ps', 'longitude', 'latitude', 'eventdate', 'ou', 'oucode', 'ouname', 'popupText'],
                     attributes = feature.attributes,
                     map = attributes.nameColumnMap,
                     html = '<table class="padding1">',
@@ -1318,13 +1322,14 @@ Ext.onReady( function() {
 
                         for (var j = 0, value; j < row.length; j++) {
                             value = row[j];
-                            obj[r.headers[j].name] = booleanNames[value] || r.metaData.optionNames[value] || names[value] || value;
+                            obj[r.headers[j].name] = booleanNames[value] || r.metaData.optionNames[value] || value;
                         }
 
+                        obj.id = obj.ou;
                         obj[gis.conf.finals.widget.value] = 0;
                         obj.label = obj.ouname;
                         obj.popupText = obj.ouname;
-                        obj.nameColumnMap = Ext.apply(names, r.metaData.optionNames, r.metaData.booleanNames);
+                        obj.nameColumnMap = Ext.apply(names, r.metaData.optionNames, r.metaData.booleanNames);                        
 
                         events.push(obj);
                     }
@@ -3467,6 +3472,7 @@ Ext.onReady( function() {
 
                 // bodyStyle
                 config.bodyStyle = 'padding: 12px; background: #fff; max-width: 600px; max-height: ' + gis.viewport.centerRegion.getHeight() / 2 + 'px';
+                config.bodyCls = 'user-select';
 
                 // destroy handler
                 config.modal = true;
@@ -3480,6 +3486,13 @@ Ext.onReady( function() {
 						if (!w.hasDestroyOnBlurHandler) {
 							gis.util.gui.window.addDestroyOnBlurHandler(w);
 						}
+
+                        document.body.oncontextmenu = true;
+                    },
+                    destroy: function() {
+                        document.body.oncontextmenu = function() {
+                            return false;
+                        };
                     }
                 };
 

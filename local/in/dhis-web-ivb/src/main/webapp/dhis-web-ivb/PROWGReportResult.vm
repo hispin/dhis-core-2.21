@@ -401,7 +401,7 @@ table.tablesorter tr.odd td:hover {
         <h3>Introduction dates: $!introStartDate to $!introEndDate</h3>
         
         <h3>GAVI Applications</h3>
-        <table id="table1" class="tablesorter" cellspacing="0" cellpadding="3" style="width:100%;">
+        <table id="gaviAppTable" class="tablesorter" style="width:100%;">
         
             <thead>
                 <tr width="100%" bgcolor="#A9D0F5">
@@ -418,7 +418,7 @@ table.tablesorter tr.odd td:hover {
                 </tr>
             </thead>
             
-            <tbody id="list">
+            <tbody>
                 #foreach( $orgUnit in $gaviApplicationsOrgUnitList )                    
                     #set( $sectionResultMap = $gaviOrgUnitResultMap.get( $orgUnit ) )
                     #foreach( $dataSetSection in $gaviDataSetSections )
@@ -479,6 +479,9 @@ table.tablesorter tr.odd td:hover {
                 #end
             </tbody>
         </table>
+        <script>
+        	$("#gaviAppTable").tablesorter( {widgets: ['zebra']});
+        </script>
         <br/>
         <h2>Vaccine Introductions</h2>
         #set( $tableCount = 0 )

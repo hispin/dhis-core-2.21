@@ -243,13 +243,13 @@ public class LoadDataValueConflictAction implements Action
         this.conflictAuditMap = conflictAuditMap;
     }
 
-    private List<DataElement> dataElementList = new ArrayList<DataElement>();
+    private Set<DataElement> dataElementList = new HashSet<DataElement>();
     
-    public List<DataElement> getDataElementList()
+    public Set<DataElement> getDataElementList()
     {
         return dataElementList;
     }    
-    public void setDataElementList( List<DataElement> dataElementList )
+    public void setDataElementList( Set<DataElement> dataElementList )
     {
         this.dataElementList = dataElementList;
     }
@@ -306,9 +306,9 @@ public class LoadDataValueConflictAction implements Action
         return orgUnitList;
     }
 
-    private Map<String,DataSet> dataSetMap = new HashMap<String, DataSet>();
+    private Map<String, String> dataSetMap = new HashMap<String, String>();
     
-    public Map<String, DataSet> getDataSetMap()
+    public Map<String, String> getDataSetMap()
     {
         return dataSetMap;
     } 
@@ -503,8 +503,18 @@ public class LoadDataValueConflictAction implements Action
                 {
                     if( dataSet.getSources() != null && dataSet.getSources().size() > 0 )
                     {
-                        dataSetMap.put( dv.getDataElement().getUid(), dataSet );  
-                        break;
+                        String dataSetName =  dataSetMap.get( dv.getDataElement().getUid() );
+                        if( dataSetName == null )
+                        {
+                        	dataSetName = dataSet.getDisplayName() + "<br>";
+                        	
+                        }
+                        else
+                        {
+                        	dataSetName += dataSet.getDisplayName() + "<br>";
+                        }
+                        dataSetMap.put( dv.getDataElement().getUid(), dataSetName );                        
+                        //break;
                     }
                 }
             }           

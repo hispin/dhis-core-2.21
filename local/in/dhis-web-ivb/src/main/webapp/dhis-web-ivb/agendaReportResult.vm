@@ -103,7 +103,7 @@ jQuery(function() {
                     <th align="left" style="width:10%;">$i18n.getString( "country" )</th>
                     <th align="left" style="width:12%;display:none;">$i18n.getString( "income_level" )</th>
                     <th align="left" style="width:12%;display:none;">$i18n.getString( "gavi_eligibility_status" )</th>
-                    <th align="left" style="width:12%;">$i18n.getString( "vaccines" )</th>
+                    <th align="left" style="width:12%;">$i18n.getString( "gavi_application_window" )</th>
                     <th align="left" style="width:12%;">$i18n.getString( "application_year_month" )</th>
                     <th align="left" style="width:12%;">$i18n.getString( "application_status" )</th>
                     <!--<th align="left" style="width:12%;">$i18n.getString( "support_status" )</th>-->

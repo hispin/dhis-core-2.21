@@ -71,7 +71,7 @@
                 #end
                 <tr #if( $mark ) bgcolor="#E0ECF8" #else bgcolor = "#FFFFFF" #end>
                     <td ><input type="radio" name="${getter}" id="${getter}" value="latest-${radioValue}"/></td>                
-                    <td >$dataSetMap.get($de.uid).displayName </td>
+                    <td >$dataSetMap.get($de.uid) </td>
                     <td >$de.name</td>
                     <td >$!valueMap.get(${getter}) </td>
                     <td >$!commentMap.get(${getter}) </td>
