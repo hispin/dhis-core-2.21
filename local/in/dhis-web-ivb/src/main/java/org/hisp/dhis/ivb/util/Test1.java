@@ -32,15 +32,18 @@ public class Test1 {
 		initialise2();
 		initialise3();
 		
+		String sourceFilePath = "C:\\Upgrade\\EssentialDrugStatusFacilityLevel.txt";
+		String destFilePath = "C:\\Upgrade\\EssentialDrugStatusFacilityLevelCONVERTED.txt";
 		BufferedReader br = null;
 		String htmlCode = "";
 		StringBuffer out = new StringBuffer();
 
-		try {
+		try 
+		{
 
 			String sCurrentLine;
 
-			br = new BufferedReader(new FileReader("C:\\Drugstatusdataset.html"));
+			br = new BufferedReader(new FileReader(sourceFilePath));
 			
 			
 			while ((sCurrentLine = br.readLine()) != null) {
@@ -99,12 +102,9 @@ public class Test1 {
 		System.out.println("************************************");
 		System.out.println( upgradeHTMLCode );
 		
-		
-		
-		
 		try {
 
-			File file = new File("C:\\Upgrade\\DrugstatusdatasetUp.html");
+			File file = new File( destFilePath );
 
 			// if file doesnt exists, then create it
 			if (!file.exists()) {
