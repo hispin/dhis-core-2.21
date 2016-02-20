@@ -89,7 +89,7 @@ jQuery(function() {
             </tr> 		
 		</table>
 		
-		<table width="100%" style="margin:auto;">
+		<table width="100%" style="margin:auto;" bgcolor="#FBEFEF">
 			<tr>
 				<td width="25%">$i18n.getString( "header_GNI" )</td>
 				<td id="GNI" width="15%">$!dataValue.get('mEidZNoWDvS')</td>

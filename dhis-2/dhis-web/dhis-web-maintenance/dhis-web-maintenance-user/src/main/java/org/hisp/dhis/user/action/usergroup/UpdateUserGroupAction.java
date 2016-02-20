@@ -34,6 +34,7 @@ import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
 import org.hisp.dhis.attribute.AttributeService;
+import org.hisp.dhis.cache.HibernateCacheManager;
 import org.hisp.dhis.system.util.AttributeUtils;
 import org.hisp.dhis.user.User;
 import org.hisp.dhis.user.UserGroup;
@@ -41,6 +42,7 @@ import org.hisp.dhis.user.UserGroupService;
 import org.hisp.dhis.user.UserService;
 
 import com.opensymphony.xwork2.Action;
+import org.springframework.beans.factory.annotation.Autowired;
 
 public class UpdateUserGroupAction
     implements Action
@@ -65,6 +67,9 @@ public class UpdateUserGroupAction
     {
         this.attributeService = attributeService;
     }
+
+    @Autowired
+    private HibernateCacheManager hibernateCacheManager;
 
     // -------------------------------------------------------------------------
     // Parameters
@@ -142,6 +147,8 @@ public class UpdateUserGroupAction
         userGroup.updateManagedGroups( managedGroups );
         
         userGroupService.updateUserGroup( userGroup );
+
+        hibernateCacheManager.clearCache();
 
         return SUCCESS;
     }
