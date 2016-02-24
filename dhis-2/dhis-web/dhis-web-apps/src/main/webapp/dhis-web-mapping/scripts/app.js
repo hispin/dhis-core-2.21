@@ -7108,6 +7108,8 @@ Ext.onReady( function() {
 			radiusLow,
 			radiusHigh,
             methodPanel,
+            lowPanelLabel,
+            highPanelLabel,
             lowPanel,
             highPanel,
             legend,
