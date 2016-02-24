@@ -7480,14 +7480,23 @@ Ext.onReady( function() {
 		legendTypeToggler = function(legendType) {
 			if (legendType === 'automatic') {
 				methodPanel.show();
-				lowPanel.show();
-				highPanel.show();
+
+                colorLow.enable();
+                lowPanelLabel.update(GIS.i18n.low_color_size + ':');
+                colorHigh.enable();
+                highPanelLabel.update(GIS.i18n.high_color_size + ':');
+                
 				legendSet.hide();
+
 			}
 			else if (legendType === 'predefined') {
 				methodPanel.hide();
-				lowPanel.hide();
-				highPanel.hide();
+                
+                colorLow.disable();
+                lowPanelLabel.update(GIS.i18n.low_size + ':');
+                colorHigh.disable();
+                highPanelLabel.update(GIS.i18n.high_size + ':');
+                
 				legendSet.show();
 			}
 		};
@@ -8599,17 +8608,26 @@ Ext.onReady( function() {
 			]
 		});
 
+        lowPanelLabel = Ext.create('Ext.panel.Panel', {
+            html: GIS.i18n.low_color_size + ':',
+            width: 100,
+            style: 'padding: 4px 0 0 4px',
+            bodyStyle: 'border: 0 none'
+        });
+
+        highPanelLabel = Ext.create('Ext.panel.Panel', {
+            html: GIS.i18n.high_color_size + ':',
+            width: 100,
+            style: 'padding: 4px 0 0 4px',
+            bodyStyle: 'border: 0 none'
+        });
+
 		lowPanel = Ext.create('Ext.container.Container', {
 			layout: 'hbox',
             height: 25,
             bodyStyle: 'border: 0 none',
 			items: [
-				{
-					html: GIS.i18n.low_color_size + ':',
-					width: 100,
-					style: 'padding: 4px 0 0 4px',
-                    bodyStyle: 'border: 0 none'
-				},
+				lowPanelLabel,
 				colorLow,
 				radiusLow
 			]
@@ -8620,12 +8638,7 @@ Ext.onReady( function() {
             height: 25,
             bodyStyle: 'border: 0 none',
 			items: [
-				{
-					html: GIS.i18n.high_color_size + ':',
-					width: 100,
-					style: 'padding: 4px 0 0 4px',
-                    bodyStyle: 'border: 0 none'
-				},
+				highPanelLabel,
 				colorHigh,
 				radiusHigh
 			]

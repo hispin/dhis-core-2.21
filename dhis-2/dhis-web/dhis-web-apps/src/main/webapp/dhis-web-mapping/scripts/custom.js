@@ -6,6 +6,7 @@
 Ext.define('Ext.ux.button.ColorButton', {
 	extend: 'Ext.button.Button',
 	alias: 'widget.colorbutton',
+    disabledCls: 'gis-colorbutton-disabled',
 	width: 109,
 	height: 22,
 	defaultValue: null,
