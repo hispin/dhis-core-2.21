@@ -46,6 +46,8 @@ import org.springframework.util.Assert;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
+
 /**
  * @author Abyot Asalefew
  */
@@ -264,11 +266,11 @@ public class DefaultTrackedEntityAttributeService
         Assert.notNull( trackedEntityAttribute, "trackedEntityAttribute is required." );
         ValueType valueType = trackedEntityAttribute.getValueType();
 
-        String errorValue = value.substring( 0, 30 );
+        String errorValue = StringUtils.substring( value, 0, 30 );
 
         if ( value.length() > 255 )
         {
-            return "Value length is greater than 256 chars for attribute " + trackedEntityAttribute.getUid();
+            return "Value length is greater than 255 chars for attribute " + trackedEntityAttribute.getUid();
         }
 
         if ( ValueType.NUMBER == valueType && !MathUtils.isNumeric( value ) )
