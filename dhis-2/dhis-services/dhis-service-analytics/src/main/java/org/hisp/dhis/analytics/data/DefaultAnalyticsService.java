@@ -629,7 +629,7 @@ public class DefaultAnalyticsService
      */
     private void applyIdScheme( DataQueryParams params, Grid grid )
     {
-        if ( params.hasNonUidOutputIdScheme() )
+        if ( !params.isSkipMeta() && params.hasNonUidOutputIdScheme() )
         {
             List<NameableObject> items = params.getAllDimensionItems();
             
@@ -680,7 +680,7 @@ public class DefaultAnalyticsService
                 tableRows.add( params.getDimensionArrayExplodeCoc( dimension ) );
             }
         }
-
+        
         reportTable.setGridColumns( new CombinationGenerator<>( tableColumns.toArray( IRT2D ) ).getCombinations() );
         reportTable.setGridRows( new CombinationGenerator<>( tableRows.toArray( IRT2D ) ).getCombinations() );
 
