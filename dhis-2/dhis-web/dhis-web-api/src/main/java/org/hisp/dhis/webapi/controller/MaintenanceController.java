@@ -98,7 +98,7 @@ public class MaintenanceController
     @Autowired
     private OrganisationUnitService organisationUnitService;
 
-    @RequestMapping( value = "/ouPathUpdate", method = { RequestMethod.PUT, RequestMethod.POST } )
+    @RequestMapping( value = "/ouPathsUpdate", method = { RequestMethod.PUT, RequestMethod.POST } )
     @PreAuthorize( "hasRole('ALL') or hasRole('F_PERFORM_MAINTENANCE')" )
     public void forceUpdatePaths()
     {
@@ -119,18 +119,18 @@ public class MaintenanceController
         maintenanceService.deleteZeroDataValues();
     }
 
-    @RequestMapping( value = "/dropSqlViews", method = { RequestMethod.PUT, RequestMethod.POST } )
-    @PreAuthorize( "hasRole('ALL') or hasRole('F_PERFORM_MAINTENANCE')" )
-    public void dropSqlViews()
-    {
-        resourceTableService.dropAllSqlViews();
-    }
-
-    @RequestMapping( value = "/createSqlViews", method = { RequestMethod.PUT, RequestMethod.POST } )
+    @RequestMapping( value = "/sqlViewsCreate", method = { RequestMethod.PUT, RequestMethod.POST } )
     @PreAuthorize( "hasRole('ALL') or hasRole('F_PERFORM_MAINTENANCE')" )
     public void createSqlViews()
     {
         resourceTableService.createAllSqlViews();
+    }
+
+    @RequestMapping( value = "/sqlViewsDrop", method = { RequestMethod.PUT, RequestMethod.POST } )
+    @PreAuthorize( "hasRole('ALL') or hasRole('F_PERFORM_MAINTENANCE')" )
+    public void dropSqlViews()
+    {
+        resourceTableService.dropAllSqlViews();
     }
 
     @RequestMapping( value = "/categoryOptionComboUpdate", method = { RequestMethod.PUT, RequestMethod.POST } )
@@ -140,7 +140,7 @@ public class MaintenanceController
         categoryService.updateAllOptionCombos();
     }
 
-    @RequestMapping( value = "/cache", method = { RequestMethod.PUT, RequestMethod.POST } )
+    @RequestMapping( value = "/cacheClear", method = { RequestMethod.PUT, RequestMethod.POST } )
     @PreAuthorize( "hasRole('ALL') or hasRole('F_PERFORM_MAINTENANCE')" )
     public void clearCache()
     {
