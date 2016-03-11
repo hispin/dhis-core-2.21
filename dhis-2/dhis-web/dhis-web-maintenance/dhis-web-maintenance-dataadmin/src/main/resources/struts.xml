@@ -640,11 +640,6 @@
     </action>
     
     
-    <action name="autoPopulateUsersFromExcel"
-		class="org.hisp.dhis.dataadmin.action.AutoPopulateUsersFromExcelAction">
-		<result name="success" type="velocity">/main.vm</result>
-		<param name="page">/dhis-web-maintenance-dataadmin/autoPopulateStatus.vm</param>
-	</action>
     
   </package>
 </struts>

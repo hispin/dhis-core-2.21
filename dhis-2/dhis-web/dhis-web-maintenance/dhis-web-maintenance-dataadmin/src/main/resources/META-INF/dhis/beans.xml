@@ -395,9 +395,7 @@ http://www.springframework.org/schema/beans http://www.springframework.org/schem
     <property name="optionService" ref="org.hisp.dhis.option.OptionService" />
   </bean>
   
-  <bean id="org.hisp.dhis.dataadmin.action.AutoPopulateUsersFromExcelAction"
-    class="org.hisp.dhis.dataadmin.action.AutoPopulateUsersFromExcelAction"
-    scope="prototype">
+  
   </bean>
 
 </beans>
