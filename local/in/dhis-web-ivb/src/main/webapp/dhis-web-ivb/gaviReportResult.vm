@@ -152,9 +152,9 @@ jQuery(function() {
                     #if( $incomeLevel == "ON" )   <th align="left" style="vertical-align: middle;display:none;">$i18n.getString( "income_level" )</th>#end 
                   	#if( $gaviEligibleStatus == "ON" )  <th align="left" style="vertical-align: middle;display:none;">$i18n.getString( "gavi_eligibility_status" )</th>#end 
                                         
-                    <th align="left" style="vertical-align: middle;">$i18n.getString( "vaccines" )</th>
+                    <th align="left" style="vertical-align: middle;">$i18n.getString( "gavi_application_window" )</th>
                     
-                    <th align="left" style="vertical-align: middle;">$i18n.getString( "vaccine_presentation" )</th>
+                    <th align="left" style="vertical-align: middle;">$i18n.getString( "vaccine_presentation_if_applicable" )</th>
                     <th align="left" style="vertical-align: middle;">$i18n.getString( "application_year_month" )</th>
                     <th align="left" style="vertical-align: middle;display:none;">Comment of $i18n.getString( "application_year_month" )</th>
                     <th align="left" style="vertical-align: middle;">$i18n.getString( "application_status" )</th>
@@ -218,7 +218,12 @@ jQuery(function() {
                                     #set($comment1 = $valueList)
                                  #end
                             #end
-                            <td align="left" style="vertical-align: middle;">$!{value1}</td>
+                            
+                            #if( $dataSetSection.id == 11 )
+                            	<td align="left" style="vertical-align: middle;">Not Applicable</td> 
+                            #else
+                            	<td align="left" style="vertical-align: middle;">$!{value1}</td>
+                            #end
                             
                             #set( $splitNumber = 0)
                             #set( $value1 = "" )
@@ -257,9 +262,15 @@ jQuery(function() {
                                 #else
                                     #set( $comment2 = $valueList )
                                 #end
-                            #end                            
-                           <td align="left" style="vertical-align: middle;" #if(${comment2} != '') title="$!{comment2}" #end>$!{value2}</td>
-                           <td align="left" style="vertical-align: middle;display:none;">$!{comment2}</td>  
+                            #end
+                            
+                            #if( $dataSetSection.id == 11 )
+	                           <td align="left" style="vertical-align: middle;">Not Applicable</td>
+	                           <td align="left" style="vertical-align: middle;display:none;">&nbsp;</td>  
+                            #else
+	                           <td align="left" style="vertical-align: middle;" #if(${comment2} != '') title="$!{comment2}" #end>$!{value2}</td>
+	                           <td align="left" style="vertical-align: middle;display:none;">$!{comment2}</td>  
+                            #end
 
                             #set( $splitNumber = 0)
                             #set( $valueGaviSS = "" )
@@ -272,8 +283,14 @@ jQuery(function() {
                                     #set($commentGaviSS = $valueList)
                                 #end
                             #end
-                           <td align="left" style="vertical-align: middle;" #if(${commentGaviSS} != '') title="$!{commentGaviSS}" #end  >$!{valueGaviSS}</td>
-                           <td align="left" style="vertical-align: middle;display:none;">$!{commentGaviSS}</td>
+                            
+                            #if( $dataSetSection.id == 11 )
+	                           <td align="left" style="vertical-align: middle;">Not Applicable</td>
+	                           <td align="left" style="vertical-align: middle;display:none;">&nbsp;</td>
+                            #else
+	                           <td align="left" style="vertical-align: middle;" #if(${commentGaviSS} != '') title="$!{commentGaviSS}" #end  >$!{valueGaviSS}</td>
+	                           <td align="left" style="vertical-align: middle;display:none;">$!{commentGaviSS}</td>                            
+                            #end
                         </tr>
                         #end
                     #end

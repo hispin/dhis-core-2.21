@@ -219,7 +219,7 @@ $(function() {
                     <th onclick="sorting()" align="left">$i18n.getString( "intro_year" ) <img src="images/asc.gif" class="asc" style="display:none;float:right;"/><img src="images/desc.gif" class="desc" style="display:none;float:right;"/></th>
 
                     #foreach( $dataElementGroup in $dataElementGroups )
-                        <th class="{sorter: false}" align="left">$!dataElementGroup.displayName</th>
+                        <th onclick="sorting()" align="left">$!dataElementGroup.displayName</th>
                     #end
                 </tr>
             </thead>

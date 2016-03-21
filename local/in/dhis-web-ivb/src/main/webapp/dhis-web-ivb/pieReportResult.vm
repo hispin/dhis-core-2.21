@@ -151,7 +151,9 @@ jQuery(function() {
                     
                     <th align="left" style="vertical-align: middle;">$i18n.getString( "review_type" )</th>
                     
-                    <th align="left" style="vertical-align: middle;">$i18n.getString( "review_date" )</th>
+                    <th align="left" style="display:none;vertical-align: middle;">$i18n.getString( "review_date" )</th>
+                    <th class="removeCell" align="left" style="vertical-align: middle;">$i18n.getString( "review_date" )</th>
+                    
                     <th width="5%" align="center" style="vertical-align: middle;">$i18n.getString( "review_status" )</th>
                                         
                     <th align="left" style="vertical-align: middle;">Comment of $i18n.getString( "review" )</th>
@@ -200,7 +202,20 @@ jQuery(function() {
 								<!-- Review Type -->
                                 <td style="vertical-align: middle;">$!reviewList.get(0)</td>                                
                                 <!-- Review Date -->
-                                <td style="vertical-align: middle;">$!reviewList.get(2)</td>
+                                #set( $reviewDate = "" )
+                                #set( $reviewDate = $!reviewList.get(2) )
+                                
+                                #set( $reviewDate =  $reviewDate.replace("Q1", "03") )
+                                #set( $reviewDate =  $reviewDate.replace("Q2", "06") )
+                                #set( $reviewDate =  $reviewDate.replace("Q3", "09") )
+                                #set( $reviewDate =  $reviewDate.replace("Q4", "12") )
+                                
+                                <td style="display:none;vertical-align: middle;">$!reviewList.get(2)</td>
+                                #if( $!reviewList.get(2).contains("Q") )
+                                	<td class="removeCell" style="vertical-align: middle;" title="$!reviewList.get(2)"><div class="note"></div>$!reviewDate</td>
+                                #else
+                                	<td class="removeCell" style="vertical-align: middle;">$!reviewDate</td>
+                                #end
                                 <!-- Review Status -->
                                 <td style="vertical-align: middle;">$!reviewList.get(4)</td>
                                 <!-- Comment of Review -->
@@ -260,6 +275,26 @@ jQuery(function() {
         border:0;
         margin-top:25px;
     }
+    
+td .note {
+    padding: 0px;
+}
+.note {
+    position: relative;
+}
+.note:after {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+	width: 0; 
+	height: 0; 
+    display: block;
+	border-left: 5px solid transparent;
+	border-bottom: 5px solid transparent;
+	
+	border-top: 5px solid #f00;
+}    
 </style>
 <script>
     
@@ -295,17 +330,18 @@ jQuery(function() {
 <script>
     $(document).ready(function()
     {
-        $("#table1").tablesorter( {widgets: ['zebra'], sortList: [[6,1], [5,0]]} );
+        $("#table1").tablesorter( {widgets: ['zebra'], sortList: [[7,1], [6,0]]} );
     });
         
     function exportToExcel()
     {
+    	var originalHTMLContent = document.getElementById('htmlContent').innerHTML;
+    	
         var currentFlaggedImgPath = $('.flagedImg').find('img').attr('src');
         var currentUnFlaggedImgPath = $('.unFlagedImg').find('img').attr('src');
         
         var redFlag = $('#redFlag').val();
         var greyFlag = $('#greyFlag').val();
-        
         
         $('.flagedImg').find('img').remove();
         $('.unFlagedImg').find('img').remove();
@@ -313,13 +349,17 @@ jQuery(function() {
         $('.flagedImg').append('<font size=\"20\" color=\"red\">*</font>')
         $('.unFlagedImg').append('<font size=\"20\" color=\"#A4A4A4\">*</font>');
         
+        $('.removeCell').remove();
         document.getElementById('htmlCode').value = document.getElementById('htmlContent').innerHTML;
-        
+                        
         $('.flagedImg').text('');
         $('.unFlagedImg').text(''); 
         
         $('.flagedImg').append('<img src=\"'+currentFlaggedImgPath+'\" width=\"20\" height=\"20\" style=\"float:left;\" \>');
         $('.unFlagedImg').append('<img src=\"'+currentUnFlaggedImgPath+'\" width=\"20\" height=\"20\" style=\"float:left;\" \>');
+        
+        document.getElementById('htmlContent').innerHTML = originalHTMLContent;
+        
         return true;
     }
     

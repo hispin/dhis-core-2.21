@@ -151,11 +151,12 @@ $(function() {
         <table style="width:95%;margin:auto;table-layout:fixed;" cellpadding="4" cellspacing="2">
                 <tr style="margin-bottom: 15px;">
                     <td width="45%">
-                        $i18n.getString( "vaccines" )<br/>                  
+                        $i18n.getString( "gavi_application_window" )<br/>                  
                         <select id="availableListVaccine" name="availableListVaccine" ondblclick="moveSelectedById( 'availableListVaccine', 'selectedListVaccine' )" multiple="multiple" style="height: 165px; width: 100%;">
                         #foreach($vaccine in $vaccineList)
-                            <option value="$vaccine.id">$vaccine.displayName</option>
+                            <option value="$vaccine.id">$vaccine.displayName</option>                            
                         #end
+                        <option value="11">CCOP</option>
                       </select>
                     </td>
                     <td style="text-align:center" width="10%">
