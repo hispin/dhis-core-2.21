@@ -53,6 +53,7 @@ import org.hisp.dhis.dataset.comparator.DataSetApprovalFrequencyComparator;
 import org.hisp.dhis.dataset.comparator.DataSetFrequencyComparator;
 import org.hisp.dhis.option.OptionSet;
 import org.hisp.dhis.organisationunit.OrganisationUnit;
+import org.hisp.dhis.period.Period;
 import org.hisp.dhis.period.PeriodType;
 import org.hisp.dhis.period.YearlyPeriodType;
 import org.hisp.dhis.schema.PropertyType;
@@ -275,23 +276,6 @@ public class DataElement
         }
 
         return categoryOptionCombos;
-    }
-
-    /**
-     * Indicates whether the data sets of this data element is associated with
-     * the given organisation unit.
-     */
-    public boolean hasDataSetOrganisationUnit( OrganisationUnit unit )
-    {
-        for ( DataSet dataSet : dataSets )
-        {
-            if ( dataSet.getSources().contains( unit ) )
-            {
-                return true;
-            }
-        }
-
-        return false;
     }
 
     /**
