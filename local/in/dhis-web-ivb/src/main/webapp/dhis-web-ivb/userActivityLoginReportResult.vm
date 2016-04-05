@@ -189,8 +189,8 @@ table.tablesorter tr.odd td:hover {
             <thead>
                 <tr>
                     <th align="left" style="vertical-align: middle;">$i18n.getString( "username" )</th>
-                    <th align="left" style="vertical-align: middle;">$i18n.getString( "surname" )</th>
                     <th align="left" style="vertical-align: middle;">$i18n.getString( "firstname" )</th>
+                    <th align="left" style="vertical-align: middle;">$i18n.getString( "surname" )</th>
                     <th align="left" style="vertical-align: middle;">$i18n.getString( "email" )</th>
                     <th align="left" style="vertical-align: middle;">$i18n.getString( "lastlogin" )</th>
                 </tr>
