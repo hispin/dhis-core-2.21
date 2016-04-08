@@ -86,7 +86,7 @@ public class DataApprovalMinLevelResourceTable
         
         for ( OrganisationUnitLevel level : objects )
         {
-            sql += "da.organisationunitid = ous2.idlevel" + level.getLevel() + " or ";
+            sql += "da2.organisationunitid = ous2.idlevel" + level.getLevel() + " or ";
         }
         
         sql = TextUtils.removeLastOr( sql ) + ") )";
