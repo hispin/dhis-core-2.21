@@ -77,14 +77,14 @@ public class DataApprovalMinLevelResourceTable
             "from dataapproval da " +
             "inner join dataapprovallevel dal on da.dataapprovallevelid=dal.dataapprovallevelid " +
             "inner join _orgunitstructure ous on da.organisationunitid=ous.organisationunitid " +
-            "where not exists (" +
+            "where not exists ( " +
                 "select 1 from dataapproval da2 " +
                 "inner join dataapprovallevel dal2 on da2.dataapprovallevelid=dal2.dataapprovallevelid " +
                 "where da.datasetid=da2.datasetid " +
                   "and da.periodid=da2.periodid " +
                   "and da.attributeoptioncomboid=da2.attributeoptioncomboid " +
                   "and dal.level > dal2.level " +
-                  "and (";
+                  "and ( ";
         
         for ( OrganisationUnitLevel level : objects )
         {
