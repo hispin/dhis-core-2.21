@@ -76,17 +76,19 @@ public class DataApprovalMinLevelResourceTable
             "select da.datasetid, da.periodid, da.organisationunitid, da.attributeoptioncomboid, dal.level as minlevel " +
             "from dataapproval da " +
             "inner join dataapprovallevel dal on da.dataapprovallevelid=dal.dataapprovallevelid " +
+            "inner join _orgunitstructure ous on da.organisationunitid=ous.organisationunitid " +
             "where not exists ( " +
                 "select 1 from dataapproval da2 " +
                 "inner join dataapprovallevel dal2 on da2.dataapprovallevelid=dal2.dataapprovallevelid " +
-                "inner join _orgunitstructure ous2 on da2.organisationunitid=ous2.organisationunitid " +
-                "where da.datasetid=da2.datasetid and da.periodid=da2.periodid and da.attributeoptioncomboid=da2.attributeoptioncomboid " +
-                "and dal2.level < dal.level " +
-                "and ( ";
+                "where da.datasetid=da2.datasetid " +
+                  "and da.periodid=da2.periodid " +
+                  "and da.attributeoptioncomboid=da2.attributeoptioncomboid " +
+                  "and dal2.level < dal.level " +
+                  "and ( ";
         
         for ( OrganisationUnitLevel level : objects )
         {
-            sql += "da2.organisationunitid = ous2.idlevel" + level.getLevel() + " or ";
+            sql += "da2.organisationunitid = ous.idlevel" + level.getLevel() + " or ";
         }
         
         sql = TextUtils.removeLastOr( sql ) + ") )";
