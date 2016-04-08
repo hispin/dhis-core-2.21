@@ -581,7 +581,12 @@
 					<li><a href="hideDataElementActionForm.action"><b>$i18n.getString( "hide_dataelements" )</b></a></li>
 				</ul>
 			</li>
-			<li id="lookup" style="visibility: hidden;"><a href="getAllLookups.action"><b>$i18n.getString( "menu_lookup" )</b></a></li>            
+			<li id="lookup" style="visibility: hidden;"><a href="getAllLookups.action"><b>$i18n.getString( "menu_lookup" )</b></a></li>   
+			<li id="report"><a href="#"><b>$i18n.getString( "Maps_and_Charts" )</b></a>
+				<ul>
+					<li><a href="generateMapsAndCharts.action"><b>$i18n.getString( "Vaccine_Introduction_Maps" )</b></a></li>
+				</ul>
+			</li>
 		</ul>
 	</div>
 	</div>
